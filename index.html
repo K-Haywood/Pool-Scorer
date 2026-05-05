@@ -51,7 +51,7 @@ input,select{user-select:text;-webkit-user-select:text;}
 .g-players{flex:1;display:flex;flex-direction:column;margin:10px 0;}
 .g-card{flex:1;position:relative;background:rgba(6,13,26,0.8);-webkit-backdrop-filter:blur(32px);border:1px solid rgba(255,255,255,.12);border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;-webkit-transition:border-color 0.3s,background 0.3s;transition:border-color 0.3s,background 0.3s;box-shadow:0 12px 40px rgba(0,0,0,0.6);}
 .g-card.pending{border-color:#ebbf52;background:rgba(235,191,82,0.12);}
-.g-name{font-size:42px;font-weight:900;color:#e8f0f8;margin-bottom:8px;text-align:center;letter-spacing:-0.02em;}
+.g-name{font-size:42px;font-weight:900;color:#e8f0f8;margin-bottom:8px;text-align:center;letter-spacing:-0.02em;word-wrap:break-word;max-width:90%;}
 .g-hint{font-size:11px;color:#5a7898;text-transform:uppercase;letter-spacing:0.15em;font-weight:700;}
 
 .win-progress-wrap{position:absolute;bottom:0;left:0;right:0;height:14px;background:rgba(255,255,255,0.05);display:none;}
@@ -379,7 +379,7 @@ var DB = {
   ag: function(g) { var a = DB.gg(); a.push(g); DB.sg(a); }
 };
 
-var curGame=null, gameStart=null, timerIv=null, lastSetup=null;
+var curGame=null, gameStart=null, timerIv=null, lastSetup=null, _longPress=false;
 var ss={mode:'singles',sel:[],tA:[],tB:[]}, judgeHistory=[], obPl=[];
 
 // ==========================================
@@ -631,15 +631,15 @@ function updTrack() {
     (function(side, idx){
       var c = document.createElement('div'); c.className = 'g-card'; c.id = 'g-card-' + side.id;
       var pressTimer;
-      c.ontouchstart = function(){ pressTimer = setTimeout(adminOverride, 2000); };
+      c.ontouchstart = function(){ pressTimer = setTimeout(function(){ _longPress=true; adminOverride(); }, 2000); };
       c.ontouchend = function(){ clearTimeout(pressTimer); };
-      c.onmousedown = function(){ pressTimer = setTimeout(adminOverride, 2000); };
+      c.onmousedown = function(){ pressTimer = setTimeout(function(){ _longPress=true; adminOverride(); }, 2000); };
       c.onmouseup = function(){ clearTimeout(pressTimer); };
       c.innerHTML = '<div class="g-name">'+esc(side.n)+'</div>' +
                     (side.members?'<div class="g-team-members">'+esc(side.members)+'</div>':'') +
                     '<div class="g-hint">Tap to Score Win</div>' +
                     '<div class="win-progress-wrap" id="wrap-'+side.id+'"><div class="win-progress-bar" id="bar-'+side.id+'"></div></div>';
-      c.onclick = function(){ WinController.handleTap(side.id); };
+      c.onclick = function(){ if(_longPress){ _longPress=false; return; } WinController.handleTap(side.id); };
       t.appendChild(c);
       if(idx === 0) {
         var sep = document.createElement('div');
@@ -1072,7 +1072,7 @@ function apmCheck(){
         setTimeout(function(){ _apmLocked=false; _apmErr(''); }, delay);
     }
 }
-function apmCancel(){ _apmBuf=''; _apmCb=null; document.getElementById('admin-pin-overlay').style.display='none'; }
+function apmCancel(){ _apmBuf=''; _apmCb=null; document.getElementById('admin-pin-overlay').style.display='none'; WinController.cancel(); }
 
 // ==========================================
 // PLAYER ADMIN ACTIONS
