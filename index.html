@@ -821,7 +821,7 @@ function submitJudgeSheet(){
 }
 function _initJsChips(){
     var el=document.getElementById('js-quick-chips'); if(!el||el.children.length) return;
-    var chips=['Cue ball scratched','8-ball on break','Wrong group hit first','No rail after contact','8-ball in wrong pocket','Ball-in-hand placement'];
+    var chips=['The white ball went in a pocket','Black ball went in on the first shot','I hit my opponent\'s ball first','Nothing hit the side after my shot','The black went in the wrong pocket','What can I do with my two shots?'];
     for(var i=0;i<chips.length;i++){
         (function(q){ var b=document.createElement('button'); b.className='j-chip'; b.innerText=q;
             b.onclick=function(){ var inp=document.getElementById('js-rule-in'); if(inp){inp.value=q;submitJudgeSheet();} };
@@ -1133,7 +1133,7 @@ function deletePlayer(id){
 // QUICK CHIPS (REFEREE)
 // ==========================================
 function initQuickChips(){
-    var chips=['Cue ball scratched','8-ball on break','Wrong group hit first','No rail after contact','8-ball in wrong pocket','Ball-in-hand placement'];
+    var chips=['The white ball went in a pocket','Black ball went in on the first shot','I hit my opponent\'s ball first','Nothing hit the side after my shot','The black went in the wrong pocket','What can I do with my two shots?'];
     var el=document.getElementById('quick-chips'); if(!el) return; el.innerHTML='';
     for(var i=0;i<chips.length;i++){
         (function(q){ var b=document.createElement('button'); b.className='j-chip'; b.innerText=q;
