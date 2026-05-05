@@ -141,6 +141,10 @@ input,select{user-select:text;-webkit-user-select:text;}
 .btn-r:active{background:rgba(239,68,68,0.2);}
 .nb:active{color:#ebbf52;}
 .g-card:active{border-color:rgba(255,255,255,0.3);background:rgba(6,13,26,0.95);}
+/* --- GAME TYPE SELECTOR --- */
+.gtype-btn{flex:1;min-height:80px;border:2px solid rgba(255,255,255,0.1);border-radius:16px;background:rgba(6,13,26,0.6);color:#5a7898;font-weight:800;font-size:16px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 4px;-webkit-transition:border-color 0.2s,background 0.2s,color 0.2s;transition:border-color 0.2s,background 0.2s,color 0.2s;}
+.gtype-btn.on{border-color:#ebbf52;background:rgba(235,191,82,0.1);color:#ebbf52;}
+.gtype-btn:active{background:rgba(235,191,82,0.15);}
 </style>
 </head>
 <body onclick="handleGlobalClick(event)">
@@ -198,6 +202,16 @@ input,select{user-select:text;-webkit-user-select:text;}
   <div class="hdr" style="padding:28px 24px 14px;display:flex;align-items:center;justify-content:space-between;position:-webkit-sticky;position:sticky;top:0;background:rgba(2,6,14,0.92);-webkit-backdrop-filter:blur(20px);z-index:10;border-bottom:1px solid rgba(255,255,255,0.05);">
       <span class="hdr-title" style="font-size:10px;font-weight:700;color:rgba(235,191,82,0.7);text-transform:uppercase;letter-spacing:.12em;">New Game</span>
   </div>
+  <div style="padding:14px 16px 0;display:flex;">
+    <button id="gt-8ball" class="gtype-btn on" onclick="setGameMode('8ball')">
+      <span style="font-size:28px;font-weight:900;margin-bottom:2px;">8</span>
+      <span style="font-size:13px;letter-spacing:0.05em;">8 Ball</span>
+    </button>
+    <button id="gt-snooker" class="gtype-btn" onclick="setGameMode('snooker')">
+      <span style="font-size:24px;margin-bottom:2px;">&#9679;</span>
+      <span style="font-size:13px;letter-spacing:0.05em;">Snooker</span>
+    </button>
+  </div>
   <div class="mode-toggle" style="display:flex;background:rgba(4,9,18,0.8);border-radius:14px;padding:4px;margin:12px 16px;border:1px solid rgba(255,255,255,0.07);">
     <button id="mb-s" class="btn f1" style="border:none;background:none;color:#ebbf52;" onclick="selMode('singles')">1 vs 1</button>
     <button id="mb-t" class="btn f1" style="border:none;background:none;color:#5a7898;" onclick="selMode('teams')">Teams</button>
@@ -230,7 +244,7 @@ input,select{user-select:text;-webkit-user-select:text;}
       <div class="flex ac jb" style="padding:10px 0;">
         <button onclick="cancelGame()" style="background:none;border:none;color:#5a7898;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;">Cancel Match</button>
         <span id="g-timer" style="font-size:26px;font-weight:800;color:#ebbf52;letter-spacing:0.05em;">00:00</span>
-        <div style="width:60px;"></div>
+        <button id="g-mode-badge" onclick="promptModeChange()" style="background:rgba(235,191,82,0.12);border:1px solid rgba(235,191,82,0.3);color:#ebbf52;font-size:11px;font-weight:700;letter-spacing:0.08em;border-radius:10px;padding:6px 10px;cursor:pointer;min-width:60px;text-align:center;">8 Ball</button>
       </div>
       
       <div style="text-align:center;margin-top:30px;">
@@ -319,7 +333,7 @@ input,select{user-select:text;-webkit-user-select:text;}
     <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(235,191,82,0.7);">&#9679; Referee AI</span>
     <div style="display:flex;align-items:center;">
       <button class="btn btn-sm" id="js-key-btn" onclick="toggleJsKey()">KEY: OFF</button>
-      <button onclick="closeJudgeSheet()" style="background:none;border:none;color:#5a7898;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;cursor:pointer;padding:4px 0 4px 8px;margin-left:10px;">✕ Back</button>
+      <button onclick="closeJudgeSheet()" class="btn btn-g btn-sm" style="margin-left:10px;padding:0 14px;">&#10005; Back</button>
     </div>
   </div>
   <div id="js-key-section" class="widget" style="display:none;margin:12px 16px 0;flex-shrink:0;">
@@ -336,6 +350,9 @@ input,select{user-select:text;-webkit-user-select:text;}
     </div>
     <div id="js-quick-chips" style="display:flex;flex-wrap:wrap;margin-top:14px;"></div>
     <div id="js-verdict-bubble"></div>
+  </div>
+  <div style="flex-shrink:0;padding:12px 16px;border-top:1px solid rgba(255,255,255,0.07);background:rgba(2,6,14,0.95);">
+    <button onclick="closeJudgeSheet()" class="btn btn-g" style="width:100%;min-height:56px;font-size:17px;font-weight:800;letter-spacing:0.04em;">&#10005; Back to Game</button>
   </div>
 </div>
 
@@ -380,6 +397,7 @@ var DB = {
 };
 
 var curGame=null, gameStart=null, timerIv=null, lastSetup=null, _longPress=false;
+var gameMode='8ball';
 var ss={mode:'singles',sel:[],tA:[],tB:[]}, judgeHistory=[], obPl=[];
 
 // ==========================================
@@ -440,7 +458,7 @@ var WinController = {
         this.timer = null;
         this.pendingId = null;
         
-        document.getElementById('game-instr').innerText = "Tap the Winner to Score";
+        document.getElementById('game-instr').innerText = gameMode==='snooker'?"Tap the Frame Winner":"Tap the Winner to Score";
         var cards = document.querySelectorAll('.g-card');
         var wraps = document.querySelectorAll('.win-progress-wrap');
         var bars = document.querySelectorAll('.win-progress-bar');
@@ -567,6 +585,32 @@ function selMode(m){
   updBtn();
 }
 
+function setGameMode(m){
+  gameMode=m;
+  localStorage.setItem('game_mode',m);
+  _updGameModeUI();
+  selMode(ss.mode||'singles');
+}
+function _updGameModeUI(){
+  var bt8=document.getElementById('gt-8ball'),bts=document.getElementById('gt-snooker');
+  if(bt8) bt8.className='gtype-btn'+(gameMode==='8ball'?' on':'');
+  if(bts) bts.className='gtype-btn'+(gameMode==='snooker'?' on':'');
+  var mt=document.querySelector('.mode-toggle');
+  if(mt) mt.style.display=gameMode==='snooker'?'none':'flex';
+  if(gameMode==='snooker') ss.mode='singles';
+  var mb=document.getElementById('g-mode-badge'); if(mb) mb.innerText=gameMode==='8ball'?'8 Ball':'Snooker';
+  var gi=document.getElementById('game-instr'); if(gi) gi.innerText=gameMode==='snooker'?'Tap the Frame Winner':'Tap the Winner to Score';
+  initQuickChips();
+}
+function promptModeChange(){
+  var other=gameMode==='8ball'?'Snooker':'8 Ball', otherKey=gameMode==='8ball'?'snooker':'8ball';
+  var current=gameMode==='8ball'?'8 Ball':'Snooker';
+  Modal.show('Switch to '+other+'?','The referee rules will change. The current game continues.',[
+    {label:'Switch to '+other,cls:'btn-g',fn:function(){ gameMode=otherKey; localStorage.setItem('game_mode',gameMode); _updGameModeUI(); Modal.hide(); }},
+    {label:'Keep '+current,fn:Modal.hide}
+  ]);
+}
+
 function renderGrid(){
   var g = document.getElementById('pl-grid'); g.innerHTML = '';
   var ps = getActive(), _gs = DB.gg();
@@ -613,6 +657,7 @@ function startGame() {
   document.getElementById('screen-game').style.display = 'block';
   document.getElementById('nav').style.display = 'none';
   updTrack();
+  document.getElementById('game-instr').innerText = gameMode==='snooker'?'Tap the Frame Winner':'Tap the Winner to Score';
   if(timerIv) clearInterval(timerIv);
   timerIv = setInterval(function(){
     var s = Math.floor((Date.now()-gameStart)/1000);
@@ -659,7 +704,7 @@ function saveGame(wid) {
   
   var _wp=byId(wid);
   var wn = (curGame.mode==='singles') ? (_wp?_wp.name:'Unknown') : (wid==='A'?(curGame.tA?curGame.tA.name:'Team A'):(curGame.tB?curGame.tB.name:'Team B'));
-  Modal.show(wn + " Wins!", "Match duration: " + fmtDur(dur), [
+  Modal.show(wn + (gameMode==='snooker'?' Wins the Frame!':" Wins!"), "Match duration: " + fmtDur(dur), [
     { label: "Rematch", cls: "btn-g", fn: function() { Modal.hide(); rematch(); } },
     { label: "New Match", fn: function() { Modal.hide(); go('play'); } },
     { label: "Undo Win", cls: "btn-r", fn: function() {
@@ -737,6 +782,36 @@ var JUDGE_SYSTEM='You are a pool referee using standard pub rules. Give only the
 '• Scratch potting your last group ball: FOUL — game does not end, two shots to opponent\n'+
 '• No calling required for any shot except the 8-ball (must nominate pocket)';
 
+var JUDGE_SYSTEM_SNOOKER='You are a snooker referee. Give only the ruling — no reasoning, no deliberation. Output stops after two short paragraphs.\n\n'+
+'STRICT FORMAT:\n'+
+'[VERDICT]\n'+'\n'+
+'[What happened: 1-2 sentences. State the rule and points penalty if foul.]\n'+'\n'+
+'[What\'s next: 1 sentence.]\n\n'+
+'VERDICT must be exactly one of: FOUL / LEGAL / LOSS / INFO\n'+
+'Maximum 50 words after the verdict. Stop after the second paragraph.\n\n'+
+'═══ SNOOKER RULES ═══\n\n'+
+'BALL VALUES: Red=1pt, Yellow=2, Green=3, Brown=4, Blue=5, Pink=6, Black=7.\n\n'+
+'SEQUENCE OF PLAY:\n'+
+'• Pot a red first, then nominate and pot a colour (colour returned to its spot). Repeat until all reds gone.\n'+
+'• Once all reds potted: pot colours in order — Yellow → Green → Brown → Blue → Pink → Black. Each colour is now left pocketed.\n\n'+
+'FOUL PENALTY (opponent receives points, minimum 4):\n'+
+'• Penalty = highest of: value of ball "on" OR value of wrongly-struck ball OR value of wrongly-pocketed ball.\n'+
+'• Failing to hit any ball: 4 pts to opponent.\n'+
+'• Cue ball pocketed (in-off): minimum 4 pts, or value of ball "on" if higher.\n'+
+'• Ball driven off table: foul — return ball to its spot, same penalty.\n'+
+'• Touching any ball with body, clothing, or non-cue-tip: foul.\n'+
+'• Potting the wrong colour when a specific colour is "on": foul — both balls returned to their spots.\n\n'+
+'FREE BALL:\n'+
+'• After a foul, if the striker is snookered on ALL balls "on", they may claim a free ball.\n'+
+'• Opponent nominates any ball as the free ball; it counts as the ball "on" for that one shot only.\n'+
+'• If free ball is potted it scores as the ball it replaced (e.g. 1 if replacing a red).\n\n'+
+'FRAME WIN:\n'+
+'• Player with more points wins the frame.\n'+
+'• A player may concede at any time.\n'+
+'• If tied when only black remains: re-spot black, lag determines who shoots.\n\n'+
+'USE INFO for: snooker questions, free ball claims, score queries, frame-over situations.\n'+
+'USE LOSS only when a player concedes the frame or is mathematically beaten.';
+
 function toggleKeySection(){ var el=document.getElementById('key-section'); el.style.display=el.style.display==='none'?'block':'none'; }
 function saveKey(){ var v=document.getElementById('key-in').value.trim(); if(v){localStorage.setItem('judge_key',v);updateKeyBtn();document.getElementById('key-section').style.display='none';}}
 function updateKeyBtn(){ var h=!!localStorage.getItem('judge_key'); var b=document.getElementById('key-btn'); b.innerText=h?'KEY: ON':'KEY: OFF'; b.style.color=h?'#10b981':'#f87171';}
@@ -748,7 +823,8 @@ function callGroq(q,cb){
   xhr.onload=function(){ try{var d=JSON.parse(xhr.responseText); if(xhr.status===200)cb(null,d.choices[0].message.content); else cb('API error ('+xhr.status+')',null);}catch(e){cb('Bad response',null);}};
   xhr.onerror=function(){ cb('Network error',null); };
   xhr.ontimeout=function(){ cb('Request timed out',null); };
-  xhr.send(JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'system',content:JUDGE_SYSTEM},{role:'user',content:q}],max_tokens:150,temperature:0,seed:8675309}));
+  var sysPrompt=gameMode==='snooker'?JUDGE_SYSTEM_SNOOKER:JUDGE_SYSTEM;
+  xhr.send(JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'system',content:sysPrompt},{role:'user',content:q}],max_tokens:150,temperature:0,seed:8675309}));
 }
 function submitJudge(){
   var i=document.getElementById('rule-in'),r=i.value.trim(); if(!r)return;
@@ -820,8 +896,10 @@ function submitJudgeSheet(){
     callGroq(r,function(err,txt){ entry.loading=false; entry.text=err?err:txt; renderJudgeHistory(); });
 }
 function _initJsChips(){
-    var el=document.getElementById('js-quick-chips'); if(!el||el.children.length) return;
-    var chips=['The white ball went in a pocket','Black ball went in on the first shot','I hit my opponent\'s ball first','Nothing hit the side after my shot','The black went in the wrong pocket','What can I do with my two shots?'];
+    var el=document.getElementById('js-quick-chips'); if(!el) return; el.innerHTML='';
+    var chips=gameMode==='snooker'
+        ?['The white ball went in','I hit the wrong ball first','I cannot hit any ball directly','What happens after a foul?','I potted a ball in wrong order','What is a free ball?']
+        :['The white ball went in a pocket','Black ball went in on the first shot','I hit my opponent\'s ball first','Nothing hit the side after my shot','The black went in the wrong pocket','What can I do with my two shots?'];
     for(var i=0;i<chips.length;i++){
         (function(q){ var b=document.createElement('button'); b.className='j-chip'; b.innerText=q;
             b.onclick=function(){ var inp=document.getElementById('js-rule-in'); if(inp){inp.value=q;submitJudgeSheet();} };
@@ -1045,6 +1123,7 @@ var Modal = {
 // ==========================================
 function setupInit(){
     ss.sel=[]; ss.tA=[]; ss.tB=[];
+    _updGameModeUI();
     selMode(ss.mode||'singles');
     renderRecentGame();
 }
@@ -1133,7 +1212,9 @@ function deletePlayer(id){
 // QUICK CHIPS (REFEREE)
 // ==========================================
 function initQuickChips(){
-    var chips=['The white ball went in a pocket','Black ball went in on the first shot','I hit my opponent\'s ball first','Nothing hit the side after my shot','The black went in the wrong pocket','What can I do with my two shots?'];
+    var chips=gameMode==='snooker'
+        ?['The white ball went in','I hit the wrong ball first','I cannot hit any ball directly','What happens after a foul?','I potted a ball in wrong order','What is a free ball?']
+        :['The white ball went in a pocket','Black ball went in on the first shot','I hit my opponent\'s ball first','Nothing hit the side after my shot','The black went in the wrong pocket','What can I do with my two shots?'];
     var el=document.getElementById('quick-chips'); if(!el) return; el.innerHTML='';
     for(var i=0;i<chips.length;i++){
         (function(q){ var b=document.createElement('button'); b.className='j-chip'; b.innerText=q;
@@ -1146,6 +1227,7 @@ function initQuickChips(){
 function init(){
     document.addEventListener('touchstart', function(){}, {passive:true});
     localStorage.setItem('admin_pin','0304');
+    gameMode=localStorage.getItem('game_mode')||'8ball';
     if(getActive().length<2){ obPl=[]; obRend(); document.getElementById('screen-onboarding').style.display='block'; }
     else go('play');
     updateKeyBtn();
