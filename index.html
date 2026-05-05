@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
@@ -7,6 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Pool Scorer">
 <meta name="theme-color" content="#050c18">
+<link rel="apple-touch-icon" href="icon.png">
 <title>Pool Scorer Pro</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900&display=swap" rel="stylesheet">
 <style>
@@ -111,7 +112,7 @@ input,select{user-select:text;-webkit-user-select:text;}
 .chart-bar-row{display:flex;align-items:center;margin-bottom:10px;}
 .chart-bar-label{font-size:12px;font-weight:700;color:#e8f0f8;width:72px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .chart-bar-outer{flex:1;height:22px;background:rgba(255,255,255,0.05);border-radius:6px;overflow:hidden;position:relative;margin:0 8px;}
-.chart-bar-inner{height:100%;border-radius:6px;transition:width 0.9s ease-out;}
+.chart-bar-inner{height:100%;border-radius:6px;-webkit-transition:width 0.9s ease-out;transition:width 0.9s ease-out;}
 .chart-bar-val{font-size:11px;font-weight:700;color:#5a7898;flex-shrink:0;width:28px;text-align:right;}
 .stat-grid{display:-webkit-flex;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;margin-top:6px;}
 .stat-cell{background:rgba(255,255,255,0.04);border-radius:10px;padding:12px;text-align:center;width:calc(50% - 5px);margin:6px 10px 0 0;}
@@ -183,7 +184,7 @@ input,select{user-select:text;-webkit-user-select:text;}
     <div style="font-size:42px;font-weight:900;margin-bottom:48px;letter-spacing:-0.03em;">Pool Scorer Pro</div>
     <div style="width:100%;max-width:380px;">
       <div class="flex" style="margin-bottom:24px;">
-        <input type="text" id="ob-in" class="btn f1" style="text-align:left;cursor:text;margin-right:12px;" placeholder="Player Name..." maxlength="20" onkeydown="if(event.keyCode===13)obAdd()">
+        <input type="text" id="ob-in" class="btn f1" style="text-align:left;cursor:text;margin-right:12px;" placeholder="Player Name..." maxlength="20" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" onkeydown="if(event.keyCode===13)obAdd()">
         <button class="btn btn-g btn-sm" onclick="obAdd()">Add</button>
       </div>
       <div id="ob-list"></div>
@@ -194,7 +195,7 @@ input,select{user-select:text;-webkit-user-select:text;}
 
 <!-- PLAY / SETUP -->
 <div id="screen-setup" class="screen">
-  <div class="hdr" style="padding:28px 24px 14px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(2,6,14,0.92);-webkit-backdrop-filter:blur(20px);z-index:10;border-bottom:1px solid rgba(255,255,255,0.05);">
+  <div class="hdr" style="padding:28px 24px 14px;display:flex;align-items:center;justify-content:space-between;position:-webkit-sticky;position:sticky;top:0;background:rgba(2,6,14,0.92);-webkit-backdrop-filter:blur(20px);z-index:10;border-bottom:1px solid rgba(255,255,255,0.05);">
       <span class="hdr-title" style="font-size:10px;font-weight:700;color:rgba(235,191,82,0.7);text-transform:uppercase;letter-spacing:.12em;">New Game</span>
   </div>
   <div class="mode-toggle" style="display:flex;background:rgba(4,9,18,0.8);border-radius:14px;padding:4px;margin:12px 16px;border:1px solid rgba(255,255,255,0.07);">
@@ -208,17 +209,17 @@ input,select{user-select:text;-webkit-user-select:text;}
   <div id="ss-teams" style="display:none;padding:0 8px;">
     <div class="widget">
       <div class="widget-hdr"><span class="widget-title">Team A</span></div>
-      <input type="text" id="ta-name" class="btn f1" style="width:100%;text-align:left;margin-bottom:12px;" value="Team A">
+      <input type="text" id="ta-name" class="btn f1" style="width:100%;text-align:left;margin-bottom:12px;" value="Team A" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false">
       <div id="ta-pl" class="flex fw"></div>
     </div>
     <div class="widget">
       <div class="widget-hdr"><span class="widget-title">Team B</span></div>
-      <input type="text" id="tb-name" class="btn f1" style="width:100%;text-align:left;margin-bottom:12px;" value="Team B">
+      <input type="text" id="tb-name" class="btn f1" style="width:100%;text-align:left;margin-bottom:12px;" value="Team B" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false">
       <div id="tb-pl" class="flex fw"></div>
     </div>
   </div>
   <div id="recent-game-wrap"></div>
-  <div style="padding:24px;position:sticky;bottom:0;background:rgba(2,6,14,0.92);border-top:1px solid rgba(255,255,255,0.05);">
+  <div style="padding:24px;position:-webkit-sticky;position:sticky;bottom:0;background:rgba(2,6,14,0.92);border-top:1px solid rgba(255,255,255,0.05);">
     <button id="ss-btn" class="btn" style="width:100%;min-height:60px;" onclick="startGame()">Start Match</button>
   </div>
 </div>
@@ -247,7 +248,7 @@ input,select{user-select:text;-webkit-user-select:text;}
 
 <!-- JUDGE AI -->
 <div id="screen-rules" class="screen">
-  <div class="hdr" style="padding:28px 24px 14px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(2,6,14,0.92);-webkit-backdrop-filter:blur(20px);z-index:10;border-bottom:1px solid rgba(255,255,255,0.05);">
+  <div class="hdr" style="padding:28px 24px 14px;display:flex;align-items:center;justify-content:space-between;position:-webkit-sticky;position:sticky;top:0;background:rgba(2,6,14,0.92);-webkit-backdrop-filter:blur(20px);z-index:10;border-bottom:1px solid rgba(255,255,255,0.05);">
     <span class="hdr-title" style="font-size:10px;font-weight:700;color:rgba(235,191,82,0.7);text-transform:uppercase;letter-spacing:.12em;">Referee AI</span>
     <button class="btn btn-sm" id="key-btn" onclick="toggleKeySection()">KEY: OFF</button>
   </div>
@@ -261,7 +262,7 @@ input,select{user-select:text;-webkit-user-select:text;}
         <div id="key-status" style="font-size:11px;color:#5a7898;margin-top:8px;"></div>
     </div>
     <div class="judge-box">
-      <input type="text" id="rule-in" class="judge-inp" placeholder="Describe the play..." maxlength="300" onkeydown="if(event.keyCode===13)submitJudge()">
+      <input type="text" id="rule-in" class="judge-inp" placeholder="Describe the play..." maxlength="300" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" onkeydown="if(event.keyCode===13)submitJudge()">
       <button class="btn btn-g btn-sm" onclick="submitJudge()" style="min-height:50px;width:50px;padding:0;font-size:18px;">&#9654;</button>
     </div>
     <div id="quick-chips" style="display:flex;flex-wrap:wrap;margin-top:14px;"></div>
@@ -271,7 +272,7 @@ input,select{user-select:text;-webkit-user-select:text;}
 
 <!-- STATS SCREEN -->
 <div id="screen-stats" class="screen">
-  <div class="hdr" style="padding:28px 24px 14px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(2,6,14,0.92);-webkit-backdrop-filter:blur(20px);z-index:10;border-bottom:1px solid rgba(255,255,255,0.05);">
+  <div class="hdr" style="padding:28px 24px 14px;display:flex;align-items:center;justify-content:space-between;position:-webkit-sticky;position:sticky;top:0;background:rgba(2,6,14,0.92);-webkit-backdrop-filter:blur(20px);z-index:10;border-bottom:1px solid rgba(255,255,255,0.05);">
       <span class="hdr-title" style="font-size:10px;font-weight:700;color:rgba(235,191,82,0.7);text-transform:uppercase;letter-spacing:.12em;">Performance Dashboard</span>
   </div>
   <div id="stats-body"></div>
@@ -279,7 +280,7 @@ input,select{user-select:text;-webkit-user-select:text;}
 
 <!-- HISTORY SCREEN -->
 <div id="screen-history" class="screen">
-  <div class="hdr" style="padding:28px 24px 14px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(2,6,14,0.92);-webkit-backdrop-filter:blur(20px);z-index:10;border-bottom:1px solid rgba(255,255,255,0.05);">
+  <div class="hdr" style="padding:28px 24px 14px;display:flex;align-items:center;justify-content:space-between;position:-webkit-sticky;position:sticky;top:0;background:rgba(2,6,14,0.92);-webkit-backdrop-filter:blur(20px);z-index:10;border-bottom:1px solid rgba(255,255,255,0.05);">
       <span class="hdr-title" style="font-size:10px;font-weight:700;color:rgba(235,191,82,0.7);text-transform:uppercase;letter-spacing:.12em;">Match Records</span>
   </div>
   <div id="hist-list"></div>
@@ -288,13 +289,13 @@ input,select{user-select:text;-webkit-user-select:text;}
 
 <!-- PLAYERS SCREEN -->
 <div id="screen-players" class="screen">
-  <div class="hdr" style="padding:28px 24px 14px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(2,6,14,0.92);-webkit-backdrop-filter:blur(20px);z-index:10;border-bottom:1px solid rgba(255,255,255,0.05);">
+  <div class="hdr" style="padding:28px 24px 14px;display:flex;align-items:center;justify-content:space-between;position:-webkit-sticky;position:sticky;top:0;background:rgba(2,6,14,0.92);-webkit-backdrop-filter:blur(20px);z-index:10;border-bottom:1px solid rgba(255,255,255,0.05);">
       <span class="hdr-title" style="font-size:10px;font-weight:700;color:rgba(235,191,82,0.7);text-transform:uppercase;letter-spacing:.12em;">Player Roster</span>
       <button class="btn btn-g btn-sm" onclick="toggleAddPl()">+ New</button>
   </div>
   <div id="add-pl-form" style="display:none;padding:16px 24px;background:rgba(2,6,14,0.6);border-bottom:1px solid rgba(255,255,255,0.06);">
     <div class="flex">
-      <input type="text" id="new-pl-in" class="btn f1" style="text-align:left;cursor:text;margin-right:12px;" placeholder="Name..." maxlength="20">
+      <input type="text" id="new-pl-in" class="btn f1" style="text-align:left;cursor:text;margin-right:12px;" placeholder="Name..." maxlength="20" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false">
       <button class="btn btn-g btn-sm" onclick="submitNewPl()">Save</button>
     </div>
   </div>
@@ -330,7 +331,7 @@ input,select{user-select:text;-webkit-user-select:text;}
   </div>
   <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px;">
     <div class="judge-box">
-      <input type="text" id="js-rule-in" class="judge-inp" placeholder="Describe the play..." maxlength="300" onkeydown="if(event.keyCode===13)submitJudgeSheet()">
+      <input type="text" id="js-rule-in" class="judge-inp" placeholder="Describe the play..." maxlength="300" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" onkeydown="if(event.keyCode===13)submitJudgeSheet()">
       <button class="btn btn-g btn-sm" onclick="submitJudgeSheet()" style="min-height:50px;width:50px;padding:0;font-size:18px;">&#9654;</button>
     </div>
     <div id="js-quick-chips" style="display:flex;flex-wrap:wrap;margin-top:14px;"></div>
