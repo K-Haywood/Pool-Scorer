@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#050c18">
 <link rel="apple-touch-icon" href="icon.png">
 <title>Pool Scorer Pro</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=DM+Sans:400,500,600,700,800,900&display=swap" rel="stylesheet">
 <style>
 /* --- CORE THEME & RESET --- */
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -61,7 +61,7 @@ input,select{user-select:text;-webkit-user-select:text;}
 
 /* --- STATISTICS VIZ --- */
 .stats-bar-track{height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;margin-top:12px;width:100%;}
-.stats-bar-fill{height:100%;background:#ebbf52;width:0%;-webkit-transition:width 0.8s ease-out;transition:width 0.8s ease-out;}
+.stats-bar-fill{height:100%;background:#ebbf52;width:0%;}
 .form-dot{width:10px;height:10px;border-radius:50%;margin-right:6px;}
 .form-win{background:#10b981;}
 .form-loss{background:#ef4444;}
@@ -69,7 +69,7 @@ input,select{user-select:text;-webkit-user-select:text;}
 /* --- SCREENS --- */
 .screen{display:none;position:fixed;top:0;left:0;right:0;bottom:76px;overflow-y:auto;-webkit-overflow-scrolling:touch;background:transparent;padding-bottom:120px;z-index:1;}
 #screen-onboarding{display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:1000;background:#050c18;}
-#screen-game{display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:500;background:transparent;}
+#screen-game{display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:500;background:#050c18;}
 
 /* --- PLAYER SELECTION --- */
 .pl-grid{display:flex;flex-wrap:wrap;padding:8px;width:100%;}
@@ -109,7 +109,7 @@ input,select{user-select:text;-webkit-user-select:text;}
 .chart-bar-row{display:flex;align-items:center;margin-bottom:10px;}
 .chart-bar-label{font-size:12px;font-weight:700;color:#e8f0f8;width:72px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .chart-bar-outer{flex:1;height:22px;background:rgba(255,255,255,0.05);border-radius:6px;overflow:hidden;position:relative;margin:0 8px;}
-.chart-bar-inner{height:100%;border-radius:6px;-webkit-transition:width 0.9s ease-out;transition:width 0.9s ease-out;}
+.chart-bar-inner{height:100%;border-radius:6px;}
 .chart-bar-val{font-size:11px;font-weight:700;color:#5a7898;flex-shrink:0;width:28px;text-align:right;}
 .stat-grid{display:-webkit-flex;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;margin-top:6px;}
 .stat-cell{background:rgba(255,255,255,0.04);border-radius:10px;padding:12px;text-align:center;width:calc(50% - 5px);margin:6px 10px 0 0;}
@@ -497,6 +497,7 @@ function handleGlobalClick(e) {
 }
 
 function adminOverride() {
+    WinController.cancel();
     var lo = document.getElementById('lockout-overlay');
     lo.style.display = 'flex';
     togglePinEntry(true);
@@ -600,6 +601,7 @@ function _updGameModeUI(){
   initQuickChips();
 }
 function promptModeChange(){
+  WinController.cancel();
   var other=gameMode==='8ball'?'Snooker':'8 Ball', otherKey=gameMode==='8ball'?'snooker':'8ball';
   var current=gameMode==='8ball'?'8 Ball':'Snooker';
   Modal.show('Switch to '+other+'?','The referee rules will change. The current game continues.',[
@@ -947,9 +949,9 @@ function renderStats(){
   // Wins leaderboard
   html+='<div class="widget"><div class="widget-hdr"><span class="widget-title">Wins Leaderboard</span></div>';
   for(var c=0;c<rows.length;c++){
-    var cr=rows[c];
+    var cr=rows[c], wp=Math.round(cr.w*100/maxW);
     html+='<div class="chart-bar-row"><div class="chart-bar-label">'+esc(cr.p.name)+'</div>'+
-      '<div class="chart-bar-outer"><div class="chart-bar-inner" id="cb-'+cr.p.id+'" style="width:0%;background:'+avColor(cr.p.name)+'"></div></div>'+
+      '<div class="chart-bar-outer"><div class="chart-bar-inner" style="width:'+wp+'%;background:'+avColor(cr.p.name)+'"></div></div>'+
       '<div class="chart-bar-val">'+cr.w+'</div></div>';
   }
   html+='</div>';
@@ -959,7 +961,7 @@ function renderStats(){
   for(var w2=0;w2<rows.length;w2++){
     var wr=rows[w2];
     html+='<div class="chart-bar-row"><div class="chart-bar-label">'+esc(wr.p.name)+'</div>'+
-      '<div class="chart-bar-outer"><div class="chart-bar-inner" id="wr-'+wr.p.id+'" style="width:0%;background:#ebbf52"></div></div>'+
+      '<div class="chart-bar-outer"><div class="chart-bar-inner" style="width:'+wr.pct+'%;background:#ebbf52"></div></div>'+
       '<div class="chart-bar-val">'+wr.pct+'%</div></div>';
   }
   html+='</div>';
@@ -973,7 +975,7 @@ function renderStats(){
       '<div class="flex ac"><div class="pc-av" style="width:40px;height:40px;margin:0 12px 0 0;font-size:14px;background:'+avColor(r.p.name)+'">'+r.p.name.substring(0,2).toUpperCase()+'</div>'+
       '<div><div style="font-weight:800;font-size:18px;">'+esc(r.p.name)+'</div><div class="flex ac" style="margin-top:5px;">'+formHtml+'</div></div></div>'+
       '<div style="text-align:right;"><div style="font-size:26px;font-weight:900;color:#ebbf52;">'+r.pct+'%</div><div style="font-size:10px;color:#5a7898;font-weight:700;">WIN RATE</div></div>'+
-      '</div><div class="stats-bar-track" style="margin-top:14px;"><div class="stats-bar-fill" id="sf-'+r.p.id+'" style="width:0%;"></div></div>'+
+      '</div><div class="stats-bar-track" style="margin-top:14px;"><div class="stats-bar-fill" style="width:'+r.pct+'%;"></div></div>'+
       '<div class="stat-grid">'+
       '<div class="stat-cell"><div class="stat-cell-val">'+r.w+'</div><div class="stat-cell-lbl">Wins</div></div>'+
       '<div class="stat-cell"><div class="stat-cell-val">'+r.l+'</div><div class="stat-cell-lbl">Losses</div></div>'+
@@ -983,19 +985,6 @@ function renderStats(){
   }
 
   body.innerHTML = html;
-
-  // Animate all bars in one batch
-  setTimeout(function(){
-    for(var i=0;i<rows.length;i++){
-      var cbEl=document.getElementById('cb-'+rows[i].p.id);
-      var wrEl=document.getElementById('wr-'+rows[i].p.id);
-      var sfEl=document.getElementById('sf-'+rows[i].p.id);
-      var wp=Math.round(rows[i].w*100/maxW);
-      if(cbEl) cbEl.style.width=wp+'%';
-      if(wrEl) wrEl.style.width=rows[i].pct+'%';
-      if(sfEl) sfEl.style.width=rows[i].pct+'%';
-    }
-  }, 80);
 }
 
 function renderHist(){
@@ -1223,7 +1212,7 @@ function initQuickChips(){
 }
 
 function init(){
-    document.addEventListener('touchstart', function(){}, {passive:true});
+    document.addEventListener('touchstart', function(){}, false);
     localStorage.setItem('admin_pin','0304');
     gameMode=localStorage.getItem('game_mode')||'8ball';
     if(getActive().length<2){ obPl=[]; obRend(); document.getElementById('screen-onboarding').style.display='block'; }
