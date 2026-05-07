@@ -986,20 +986,22 @@ function snookerSwitchPlayer(i){
 }
 function snookerEndFramePrompt(){
   if(!snookerState) return;
-  var p0=byId(curGame.pids[0]), p1=byId(curGame.pids[1]);
-  var n0=p0?p0.name:'Player 1', n1=p1?p1.name:'Player 2';
   var s0=snookerState.scores[0], s1=snookerState.scores[1];
-  var leading=s0>s1?0:(s1>s0?1:-1);
-  Modal.show('End Frame',
-    '<div style="font-size:14px;color:#94a3b8;margin-bottom:6px;">Final score</div>'+
-    '<div style="font-size:38px;font-weight:900;color:#fff;">'+s0+' &mdash; '+s1+'</div>'+
-    '<div style="font-size:12px;color:#5a7898;margin-top:10px;">Tap the winner</div>',
-    [
-      {label:n0+' ('+s0+')'+(leading===0?' ★':''),cls:leading===0?'btn-g':'',fn:function(){snookerSaveFrame(curGame.pids[0]);}},
-      {label:n1+' ('+s1+')'+(leading===1?' ★':''),cls:leading===1?'btn-g':'',fn:function(){snookerSaveFrame(curGame.pids[1]);}},
-      {label:'Cancel',fn:Modal.hide}
-    ]
-  );
+  if(s0!==s1){
+    snookerSaveFrame(curGame.pids[s0>s1?0:1]);
+  } else {
+    var p0=byId(curGame.pids[0]), p1=byId(curGame.pids[1]);
+    var n0=p0?p0.name:'Player 1', n1=p1?p1.name:'Player 2';
+    Modal.show('Tied — Who Won?',
+      '<div style="font-size:36px;font-weight:900;color:#fff;">'+s0+' &mdash; '+s1+'</div>'+
+      '<div style="font-size:12px;color:#5a7898;margin-top:8px;">Scores are equal — tap the winner</div>',
+      [
+        {label:n0,cls:'btn-g',fn:function(){snookerSaveFrame(curGame.pids[0]);}},
+        {label:n1,cls:'btn-g',fn:function(){snookerSaveFrame(curGame.pids[1]);}},
+        {label:'Cancel',fn:Modal.hide}
+      ]
+    );
+  }
 }
 function snookerSaveFrame(winnerId){
   Modal.hide();
