@@ -142,6 +142,38 @@ input,select{user-select:text;-webkit-user-select:text;}
 .gtype-btn{flex:1;min-height:80px;border:2px solid rgba(255,255,255,0.1);border-radius:16px;background:rgba(6,13,26,0.6);color:#5a7898;font-weight:800;font-size:16px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 4px;-webkit-transition:border-color 0.2s,background 0.2s,color 0.2s;transition:border-color 0.2s,background 0.2s,color 0.2s;}
 .gtype-btn.on{border-color:#ebbf52;background:rgba(235,191,82,0.1);color:#ebbf52;}
 .gtype-btn:active{background:rgba(235,191,82,0.15);}
+/* --- SNOOKER SCORING UI --- */
+.sn-scores{display:flex;margin:8px 0 14px;}
+.sn-score-card{flex:1;padding:14px 10px;background:rgba(6,13,26,0.92);border:2px solid rgba(255,255,255,0.1);border-radius:14px;margin:0 6px;text-align:center;cursor:pointer;-webkit-transition:border-color 0.2s,background 0.2s;transition:border-color 0.2s,background 0.2s;}
+.sn-score-card.on{border-color:#ebbf52;background:rgba(235,191,82,0.08);}
+.sn-name{font-size:13px;font-weight:700;color:#94a3b8;margin-bottom:4px;letter-spacing:0.05em;}
+.sn-score-card.on .sn-name{color:#ebbf52;}
+.sn-score{font-size:46px;font-weight:900;color:#fff;line-height:1;}
+.sn-meta{font-size:10px;color:#5a7898;margin-top:6px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;}
+.sn-balls{display:-webkit-flex;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;-webkit-justify-content:center;justify-content:center;margin:8px 0;}
+.sn-ball{width:64px;height:64px;border-radius:50%;border:2px solid rgba(255,255,255,0.18);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;margin:4px;font-weight:900;color:#fff;-webkit-tap-highlight-color:transparent;}
+.sn-ball:active{border-color:#ebbf52;}
+.sn-ball-red{background:#dc2626;}
+.sn-ball-yellow{background:#facc15;color:#1a1a1a;}
+.sn-ball-green{background:#16a34a;}
+.sn-ball-brown{background:#854d0e;}
+.sn-ball-blue{background:#2563eb;}
+.sn-ball-pink{background:#ec4899;}
+.sn-ball-black{background:#0f172a;border-color:rgba(255,255,255,0.3);}
+.sn-ball-val{font-size:22px;line-height:1;}
+.sn-ball-lbl{font-size:8px;letter-spacing:0.1em;margin-top:1px;opacity:0.7;}
+.sn-status{text-align:center;font-size:12px;color:#5a7898;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;margin:6px 0 10px;}
+.sn-actions{display:flex;margin:6px 0 10px;}
+.sn-act{flex:1;min-height:48px;border:1px solid rgba(255,255,255,0.1);background:rgba(6,13,26,0.7);color:#e8f0f8;border-radius:12px;font-weight:700;font-size:13px;cursor:pointer;margin:0 4px;text-transform:uppercase;letter-spacing:0.08em;}
+.sn-act:active{background:rgba(255,255,255,0.08);}
+.sn-act-foul{background:rgba(239,68,68,0.15);color:#f87171;border-color:rgba(239,68,68,0.3);}
+.sn-act-foul:active{background:rgba(239,68,68,0.25);}
+.sn-act-undo{flex:0 0 70px;}
+.sn-end{width:100%;min-height:58px;background:#ebbf52;color:#050c18;font-weight:800;border:none;border-radius:14px;font-size:15px;cursor:pointer;text-transform:uppercase;letter-spacing:0.1em;}
+.sn-end:active{background:#d4aa47;}
+/* --- STATS FILTER CHIPS --- */
+.stat-chip{padding:8px 16px;border-radius:20px;border:1px solid rgba(255,255,255,0.1);background:rgba(6,13,26,0.7);color:#94a3b8;font-weight:700;font-size:12px;cursor:pointer;margin:0 4px 0 0;text-transform:uppercase;letter-spacing:0.05em;-webkit-transition:background 0.15s,color 0.15s;transition:background 0.15s,color 0.15s;}
+.stat-chip.on{background:#ebbf52;color:#050c18;border-color:#ebbf52;}
 </style>
 </head>
 <body onclick="handleGlobalClick(event)">
@@ -243,16 +275,27 @@ input,select{user-select:text;-webkit-user-select:text;}
         <span id="g-timer" style="font-size:26px;font-weight:800;color:#ebbf52;letter-spacing:0.05em;">00:00</span>
         <button id="g-mode-badge" onclick="promptModeChange()" style="background:rgba(235,191,82,0.12);border:1px solid rgba(235,191,82,0.3);color:#ebbf52;font-size:11px;font-weight:700;letter-spacing:0.08em;border-radius:10px;padding:6px 10px;cursor:pointer;min-width:60px;text-align:center;">8 Ball</button>
       </div>
-      
-      <div style="text-align:center;margin-top:30px;">
-          <div style="font-size:11px;font-weight:900;color:#5a7898;text-transform:uppercase;letter-spacing:0.25em;margin-bottom:6px;">Game On</div>
-          <div id="game-instr" style="font-size:18px;font-weight:700;color:#fff;">Tap the Winner to Score</div>
+
+      <!-- 8-BALL UI -->
+      <div id="game-8ball-ui" style="flex:1;display:flex;flex-direction:column;">
+        <div style="text-align:center;margin-top:30px;">
+            <div style="font-size:11px;font-weight:900;color:#5a7898;text-transform:uppercase;letter-spacing:0.25em;margin-bottom:6px;">Game On</div>
+            <div id="game-instr" style="font-size:18px;font-weight:700;color:#fff;">Tap the Winner to Score</div>
+        </div>
+        <div class="g-players" id="g-player-tracker"></div>
+        <div style="opacity:0.3;text-align:center;font-size:12px;color:#5a7898;margin-bottom:20px;">
+            Hold name for 2s for Admin PIN
+        </div>
       </div>
 
-      <div class="g-players" id="g-player-tracker"></div>
-      
-      <div style="opacity:0.3;text-align:center;font-size:12px;color:#5a7898;margin-bottom:20px;">
-          Hold name for 2s for Admin PIN
+      <!-- SNOOKER UI -->
+      <div id="game-snooker-ui" style="display:none;flex:1;flex-direction:column;">
+        <div class="sn-scores" id="sn-scores"></div>
+        <div style="font-size:10px;text-align:center;color:#5a7898;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:4px;">Tap a ball that was potted</div>
+        <div class="sn-balls" id="sn-balls"></div>
+        <div class="sn-status" id="sn-status">Reds: 15 left</div>
+        <div class="sn-actions" id="sn-actions"></div>
+        <button class="sn-end" onclick="snookerEndFramePrompt()">End Frame &amp; Save</button>
       </div>
   </div>
 </div>
@@ -285,6 +328,11 @@ input,select{user-select:text;-webkit-user-select:text;}
 <div id="screen-stats" class="screen">
   <div class="hdr" style="padding:28px 24px 14px;display:flex;align-items:center;justify-content:space-between;position:-webkit-sticky;position:sticky;top:0;background:rgba(2,6,14,0.97);z-index:10;border-bottom:1px solid rgba(255,255,255,0.05);">
       <span class="hdr-title" style="font-size:10px;font-weight:700;color:rgba(235,191,82,0.7);text-transform:uppercase;letter-spacing:.12em;">Performance Dashboard</span>
+  </div>
+  <div style="padding:12px 16px 0;display:flex;flex-wrap:wrap;">
+    <button class="stat-chip on" data-filter="all" onclick="setStatsFilter('all')">All Games</button>
+    <button class="stat-chip" data-filter="8ball" onclick="setStatsFilter('8ball')">8 Ball</button>
+    <button class="stat-chip" data-filter="snooker" onclick="setStatsFilter('snooker')">Snooker</button>
   </div>
   <div id="stats-body"></div>
 </div>
@@ -396,6 +444,8 @@ var DB = {
 var curGame=null, gameStart=null, timerIv=null, lastSetup=null, _longPress=false;
 var gameMode='8ball';
 var ss={mode:'singles',sel:[],tA:[],tB:[]}, judgeHistory=[], obPl=[];
+var snookerState=null;
+var statsFilter='all';
 
 // ==========================================
 // WIN CONTROLLER (Zero-Friction + Cancel)
@@ -604,8 +654,24 @@ function promptModeChange(){
   WinController.cancel();
   var other=gameMode==='8ball'?'Snooker':'8 Ball', otherKey=gameMode==='8ball'?'snooker':'8ball';
   var current=gameMode==='8ball'?'8 Ball':'Snooker';
-  Modal.show('Switch to '+other+'?','The referee rules will change. The current game continues.',[
-    {label:'Switch to '+other,cls:'btn-g',fn:function(){ gameMode=otherKey; localStorage.setItem('game_mode',gameMode); _updGameModeUI(); Modal.hide(); }},
+  var inProgressSnooker=curGame&&gameMode==='snooker'&&snookerState&&(snookerState.scores[0]>0||snookerState.scores[1]>0);
+  var warning=inProgressSnooker?'<div style="color:#f87171;font-size:13px;margin-bottom:12px;font-weight:700;">Current snooker score will be lost.</div>':'';
+  var body=warning+'The referee rules will change'+(curGame?' and the game UI will reset':'.')+(curGame?'.':'');
+  Modal.show('Switch to '+other+'?',body,[
+    {label:'Switch to '+other,cls:'btn-g',fn:function(){
+      gameMode=otherKey; localStorage.setItem('game_mode',gameMode); _updGameModeUI(); Modal.hide();
+      if(curGame){
+        if(gameMode==='snooker' && curGame.mode==='teams'){
+          // Snooker doesn't support teams — abort the game
+          if(timerIv) clearInterval(timerIv);
+          curGame=null; snookerState=null;
+          go('play');
+          return;
+        }
+        curGame.gameType=gameMode;
+        _showGameUI();
+      }
+    }},
     {label:'Keep '+current,fn:Modal.hide}
   ]);
 }
@@ -651,20 +717,34 @@ function startGame() {
     for(var oi=0;oi<ss.tA.length;oi++) if(ss.tB.indexOf(ss.tA[oi])!==-1) return;
   }
   var _taName=document.getElementById('ta-name').value.trim()||'Team A', _tbName=document.getElementById('tb-name').value.trim()||'Team B';
-  lastSetup={mode:ss.mode, sel:ss.sel.slice(), tA:ss.tA.slice(), tB:ss.tB.slice(), taName:_taName, tbName:_tbName};
-  curGame = { mode: ss.mode, pids: ss.sel.slice(), tA: ss.mode==='teams'?{name:_taName, pids:ss.tA.slice()}:null, tB: ss.mode==='teams'?{name:_tbName, pids:ss.tB.slice()}:null };
+  lastSetup={mode:ss.mode, sel:ss.sel.slice(), tA:ss.tA.slice(), tB:ss.tB.slice(), taName:_taName, tbName:_tbName, gameType:gameMode};
+  curGame = { mode: ss.mode, pids: ss.sel.slice(), tA: ss.mode==='teams'?{name:_taName, pids:ss.tA.slice()}:null, tB: ss.mode==='teams'?{name:_tbName, pids:ss.tB.slice()}:null, gameType:gameMode };
   gameStart = Date.now();
   document.getElementById('screen-setup').style.display = 'none';
   document.getElementById('screen-game').style.display = 'block';
   document.getElementById('nav').style.display = 'none';
-  updTrack();
-  document.getElementById('game-instr').innerText = gameMode==='snooker'?'Tap the Frame Winner':'Tap the Winner to Score';
+  _showGameUI();
   if(timerIv) clearInterval(timerIv);
   timerIv = setInterval(function(){
     var s = Math.floor((Date.now()-gameStart)/1000);
     var m = Math.floor(s/60); var sc = s%60;
     document.getElementById('g-timer').innerText = (m<10?'0':'')+m+':'+(sc<10?'0':'')+sc;
   }, 1000);
+}
+function _showGameUI(){
+  if(gameMode==='snooker'){
+    document.getElementById('game-8ball-ui').style.display='none';
+    document.getElementById('game-snooker-ui').style.display='flex';
+    _snookerInit();
+    _snookerRenderBalls();
+    _snookerActionsRender();
+    _snookerRender();
+  } else {
+    document.getElementById('game-snooker-ui').style.display='none';
+    document.getElementById('game-8ball-ui').style.display='flex';
+    updTrack();
+    document.getElementById('game-instr').innerText='Tap the Winner to Score';
+  }
 }
 
 function updTrack() {
@@ -701,7 +781,7 @@ function saveGame(wid) {
   if(timerIv) clearInterval(timerIv);
   var dur = Math.floor((Date.now()-gameStart)/1000);
   var gid = uid();
-  DB.ag({ id: gid, mode: curGame.mode, date: Date.now(), wid: wid, pids: curGame.pids, tA: curGame.tA, tB: curGame.tB, dur: dur, wt: (wid==='A'||wid==='B')?wid:null });
+  DB.ag({ id: gid, gameType: curGame.gameType||'8ball', mode: curGame.mode, date: Date.now(), wid: wid, pids: curGame.pids, tA: curGame.tA, tB: curGame.tB, dur: dur, wt: (wid==='A'||wid==='B')?wid:null });
   
   var _wp=byId(wid);
   var wn = (curGame.mode==='singles') ? (_wp?_wp.name:'Unknown') : (wid==='A'?(curGame.tA?curGame.tA.name:'Team A'):(curGame.tB?curGame.tB.name:'Team B'));
@@ -722,8 +802,153 @@ function saveGame(wid) {
   ]);
 }
 
-function rematch(){ if(!lastSetup) return; ss.mode=lastSetup.mode; ss.sel=lastSetup.sel.slice(); ss.tA=lastSetup.tA.slice(); ss.tB=lastSetup.tB.slice(); startGame(); }
-function cancelGame() { WinController.cancel(); Modal.show('Cancel?','Lose progress?',[{label:'Exit',cls:'btn-r',fn:function(){if(timerIv)clearInterval(timerIv);Modal.hide();go('play');}},{label:'Stay',fn:Modal.hide}]); }
+function rematch(){ if(!lastSetup) return; ss.mode=lastSetup.mode; ss.sel=lastSetup.sel.slice(); ss.tA=lastSetup.tA.slice(); ss.tB=lastSetup.tB.slice(); if(lastSetup.gameType) gameMode=lastSetup.gameType; startGame(); }
+function cancelGame() { WinController.cancel(); Modal.show('Cancel?','Lose progress?',[{label:'Exit',cls:'btn-r',fn:function(){if(timerIv)clearInterval(timerIv);snookerState=null;Modal.hide();go('play');}},{label:'Stay',fn:Modal.hide}]); }
+
+// ==========================================
+// SNOOKER SCORING
+// ==========================================
+function _snookerInit(){
+  snookerState={scores:[0,0],currentPlayer:0,currentBreak:0,redsLeft:15,highestBreak:[0,0],fouls:[0,0],history:[]};
+}
+function _snookerSnap(){
+  return {scores:snookerState.scores.slice(),currentPlayer:snookerState.currentPlayer,currentBreak:snookerState.currentBreak,redsLeft:snookerState.redsLeft,highestBreak:snookerState.highestBreak.slice(),fouls:snookerState.fouls.slice()};
+}
+function _snookerRestore(s){
+  snookerState.scores=s.scores.slice();
+  snookerState.currentPlayer=s.currentPlayer;
+  snookerState.currentBreak=s.currentBreak;
+  snookerState.redsLeft=s.redsLeft;
+  snookerState.highestBreak=s.highestBreak.slice();
+  snookerState.fouls=s.fouls.slice();
+}
+var SN_BALLS=[{c:'red',v:1,n:'Red'},{c:'yellow',v:2,n:'Yellow'},{c:'green',v:3,n:'Green'},{c:'brown',v:4,n:'Brown'},{c:'blue',v:5,n:'Blue'},{c:'pink',v:6,n:'Pink'},{c:'black',v:7,n:'Black'}];
+function _snookerRenderBalls(){
+  var html='';
+  for(var i=0;i<SN_BALLS.length;i++){
+    var b=SN_BALLS[i];
+    html+='<button class="sn-ball sn-ball-'+b.c+'" onclick="snookerPot('+b.v+')">'+
+          '<span class="sn-ball-val">'+b.v+'</span>'+
+          '<span class="sn-ball-lbl">'+b.n.charAt(0)+'</span>'+
+          '</button>';
+  }
+  document.getElementById('sn-balls').innerHTML=html;
+}
+function _snookerActionsRender(){
+  document.getElementById('sn-actions').innerHTML=
+    '<button class="sn-act" onclick="snookerMiss()">Miss</button>'+
+    '<button class="sn-act sn-act-foul" onclick="snookerFoulPrompt()">Foul</button>'+
+    '<button class="sn-act sn-act-undo" onclick="snookerUndo()">&#8634;</button>';
+}
+function _snookerRender(){
+  if(!snookerState||!curGame) return;
+  var p0=byId(curGame.pids[0]), p1=byId(curGame.pids[1]);
+  var n0=p0?p0.name:'Player 1', n1=p1?p1.name:'Player 2';
+  var html='';
+  for(var i=0;i<2;i++){
+    var n=i===0?n0:n1;
+    var active=snookerState.currentPlayer===i;
+    var meta=active?('Break: '+snookerState.currentBreak):('HB: '+snookerState.highestBreak[i]);
+    html+='<div class="sn-score-card'+(active?' on':'')+'" onclick="snookerSwitchPlayer('+i+')">'+
+          '<div class="sn-name">'+esc(n)+'</div>'+
+          '<div class="sn-score">'+snookerState.scores[i]+'</div>'+
+          '<div class="sn-meta">'+meta+'</div>'+
+          '</div>';
+  }
+  document.getElementById('sn-scores').innerHTML=html;
+  var status=snookerState.redsLeft>0?('Reds: '+snookerState.redsLeft+' left'):'Final colours &mdash; Y / G / Br / Bl / P / Bk';
+  document.getElementById('sn-status').innerHTML=status;
+}
+function snookerPot(value){
+  if(!snookerState) return;
+  snookerState.history.push(_snookerSnap());
+  var p=snookerState.currentPlayer;
+  snookerState.scores[p]+=value;
+  snookerState.currentBreak+=value;
+  if(value===1 && snookerState.redsLeft>0) snookerState.redsLeft--;
+  if(snookerState.currentBreak>snookerState.highestBreak[p]) snookerState.highestBreak[p]=snookerState.currentBreak;
+  _snookerRender();
+}
+function snookerMiss(){
+  if(!snookerState) return;
+  snookerState.history.push(_snookerSnap());
+  snookerState.currentBreak=0;
+  snookerState.currentPlayer=1-snookerState.currentPlayer;
+  _snookerRender();
+}
+function snookerFoulPrompt(){
+  document.getElementById('sn-actions').innerHTML=
+    '<button class="sn-act sn-act-foul" onclick="snookerFoul(4)">+4</button>'+
+    '<button class="sn-act sn-act-foul" onclick="snookerFoul(5)">+5</button>'+
+    '<button class="sn-act sn-act-foul" onclick="snookerFoul(6)">+6</button>'+
+    '<button class="sn-act sn-act-foul" onclick="snookerFoul(7)">+7</button>'+
+    '<button class="sn-act" onclick="_snookerActionsRender()">Cancel</button>';
+}
+function snookerFoul(points){
+  if(!snookerState) return;
+  snookerState.history.push(_snookerSnap());
+  var p=snookerState.currentPlayer;
+  snookerState.scores[1-p]+=points;
+  snookerState.fouls[p]++;
+  snookerState.currentBreak=0;
+  snookerState.currentPlayer=1-p;
+  _snookerActionsRender();
+  _snookerRender();
+}
+function snookerUndo(){
+  if(!snookerState||!snookerState.history.length) return;
+  _snookerRestore(snookerState.history.pop());
+  _snookerRender();
+}
+function snookerSwitchPlayer(i){
+  if(!snookerState||snookerState.currentPlayer===i) return;
+  snookerState.history.push(_snookerSnap());
+  snookerState.currentBreak=0;
+  snookerState.currentPlayer=i;
+  _snookerRender();
+}
+function snookerEndFramePrompt(){
+  if(!snookerState) return;
+  var p0=byId(curGame.pids[0]), p1=byId(curGame.pids[1]);
+  var n0=p0?p0.name:'Player 1', n1=p1?p1.name:'Player 2';
+  var s0=snookerState.scores[0], s1=snookerState.scores[1];
+  var leading=s0>s1?0:(s1>s0?1:-1);
+  Modal.show('End Frame',
+    '<div style="font-size:14px;color:#94a3b8;margin-bottom:6px;">Final score</div>'+
+    '<div style="font-size:38px;font-weight:900;color:#fff;">'+s0+' &mdash; '+s1+'</div>'+
+    '<div style="font-size:12px;color:#5a7898;margin-top:10px;">Tap the winner</div>',
+    [
+      {label:n0+' ('+s0+')'+(leading===0?' ★':''),cls:leading===0?'btn-g':'',fn:function(){snookerSaveFrame(curGame.pids[0]);}},
+      {label:n1+' ('+s1+')'+(leading===1?' ★':''),cls:leading===1?'btn-g':'',fn:function(){snookerSaveFrame(curGame.pids[1]);}},
+      {label:'Cancel',fn:Modal.hide}
+    ]
+  );
+}
+function snookerSaveFrame(winnerId){
+  Modal.hide();
+  if(timerIv) clearInterval(timerIv);
+  var dur=Math.floor((Date.now()-gameStart)/1000);
+  var gid=uid();
+  var hb={}, fls={};
+  hb[curGame.pids[0]]=snookerState.highestBreak[0];
+  hb[curGame.pids[1]]=snookerState.highestBreak[1];
+  fls[curGame.pids[0]]=snookerState.fouls[0];
+  fls[curGame.pids[1]]=snookerState.fouls[1];
+  var snookerData={scoreA:snookerState.scores[0],scoreB:snookerState.scores[1],highestBreak:hb,fouls:fls};
+  DB.ag({id:gid,gameType:'snooker',mode:'singles',date:Date.now(),wid:winnerId,pids:curGame.pids.slice(),tA:null,tB:null,dur:dur,wt:null,snookerData:snookerData});
+  var winner=byId(winnerId);
+  var wn=winner?winner.name:'Winner';
+  var maxHb=Math.max(snookerState.highestBreak[0],snookerState.highestBreak[1]);
+  Modal.show(wn+' Wins the Frame!',
+    'Final score: '+snookerState.scores[0]+' &mdash; '+snookerState.scores[1]+'<br>'+
+    'Highest break: '+maxHb+'<br>'+
+    'Duration: '+fmtDur(dur),
+    [
+      {label:'Rematch',cls:'btn-g',fn:function(){Modal.hide();snookerState=null;rematch();}},
+      {label:'New Match',fn:function(){Modal.hide();snookerState=null;go('play');}}
+    ]
+  );
+}
 
 // ==========================================
 // JUDGE AI (Tight BCA Rules)
@@ -919,23 +1144,39 @@ function calcStreak(form){
     for(var s=1,j=1;j<form.length;j++){ s=(form[j]===form[j-1])?s+1:1; if(s>best) best=s; }
     return {cur:cur,best:best,curType:curType};
 }
+function setStatsFilter(f){
+  statsFilter=f;
+  var chips=document.querySelectorAll('.stat-chip');
+  for(var i=0;i<chips.length;i++){
+    var match=chips[i].getAttribute('data-filter')===f;
+    chips[i].className='stat-chip'+(match?' on':'');
+  }
+  renderStats();
+}
+function _gameType(g){ return g.gameType||'8ball'; }
 function renderStats(){
   var body = document.getElementById('stats-body'); body.innerHTML = '';
   var ps = getActive(), rows = [];
   var gs = DB.gg();
+  if(statsFilter!=='all'){
+    gs=gs.filter(function(g){ return _gameType(g)===statsFilter; });
+  }
 
   for(var i=0; i<ps.length; i++){
-    var p=ps[i],wins=0,losses=0,total=0,form=[],totalDur=0;
+    var p=ps[i],wins=0,losses=0,total=0,form=[],totalDur=0,maxBreak=0;
     for(var j=0; j<gs.length; j++){
       if(plInGame(gs[j],p.id)){
         total++;
         totalDur += gs[j].dur||0;
         if(plWon(gs[j],p.id)){ wins++; form.push('W'); } else { losses++; form.push('L'); }
+        if(gs[j].snookerData && gs[j].snookerData.highestBreak && gs[j].snookerData.highestBreak[p.id]){
+          if(gs[j].snookerData.highestBreak[p.id]>maxBreak) maxBreak=gs[j].snookerData.highestBreak[p.id];
+        }
       }
     }
     if(total>0){
       var sk=calcStreak(form);
-      rows.push({p:p,w:wins,l:losses,t:total,pct:Math.round(wins*100/total),form:form.slice(-7),streak:sk,avgDur:Math.round(totalDur/total)});
+      rows.push({p:p,w:wins,l:losses,t:total,pct:Math.round(wins*100/total),form:form.slice(-7),streak:sk,avgDur:Math.round(totalDur/total),hb:maxBreak});
     }
   }
 
@@ -967,10 +1208,12 @@ function renderStats(){
   html+='</div>';
 
   // Per-player cards
+  var showHb = statsFilter==='snooker';
   for(var k=0;k<rows.length;k++){
     var r=rows[k], formHtml='';
     for(var f=0;f<r.form.length;f++) formHtml+='<div class="form-dot '+(r.form[f]==='W'?'form-win':'form-loss')+'"></div>';
     var sc=r.streak.curType==='W'?'#10b981':'#f87171', sl=r.streak.curType==='W'?'Win Streak':'Lose Streak';
+    var extraCell = showHb ? '<div class="stat-cell"><div class="stat-cell-val">'+r.hb+'</div><div class="stat-cell-lbl">Highest Break</div></div>' : '<div class="stat-cell"><div class="stat-cell-val">'+fmtDur(r.avgDur)+'</div><div class="stat-cell-lbl">Avg Duration</div></div>';
     html+='<div class="widget"><div class="flex jb ac">'+
       '<div class="flex ac"><div class="pc-av" style="width:40px;height:40px;margin:0 12px 0 0;font-size:14px;background:'+avColor(r.p.name)+'">'+r.p.name.substring(0,2).toUpperCase()+'</div>'+
       '<div><div style="font-weight:800;font-size:18px;">'+esc(r.p.name)+'</div><div class="flex ac" style="margin-top:5px;">'+formHtml+'</div></div></div>'+
@@ -980,7 +1223,7 @@ function renderStats(){
       '<div class="stat-cell"><div class="stat-cell-val">'+r.w+'</div><div class="stat-cell-lbl">Wins</div></div>'+
       '<div class="stat-cell"><div class="stat-cell-val">'+r.l+'</div><div class="stat-cell-lbl">Losses</div></div>'+
       '<div class="stat-cell"><div class="stat-cell-val" style="color:'+sc+';">'+r.streak.cur+'</div><div class="stat-cell-lbl">'+sl+'</div></div>'+
-      '<div class="stat-cell"><div class="stat-cell-val">'+fmtDur(r.avgDur)+'</div><div class="stat-cell-lbl">Avg Duration</div></div>'+
+      extraCell+
       '</div></div>';
   }
 
@@ -997,9 +1240,17 @@ function renderHist(){
     var n1=g.mode==='singles'?(_h0?_h0.name:'?'):(g.tA?g.tA.name:'Team A');
     var n2=g.mode==='singles'?(_h1?_h1.name:'?'):(g.tB?g.tB.name:'Team B');
     var wd=g.mode==='singles'?(_hw?_hw.name:'?'):(g.wt==='A'?(g.tA?g.tA.name:'Team A'):(g.tB?g.tB.name:'Team B'));
-    html+='<div class="hcard"><div class="flex jb"><div style="font-size:10px;font-weight:800;color:#5a7898;text-transform:uppercase;">'+fmtDate(g.date)+'</div><div style="font-size:10px;color:#5a7898;">'+fmtDur(g.dur||0)+'</div></div>'+
+    var typeBadge=_gameType(g)==='snooker'?'<span style="display:inline-block;background:rgba(235,191,82,0.15);color:#ebbf52;padding:2px 8px;border-radius:6px;font-size:9px;font-weight:800;letter-spacing:0.1em;margin-right:8px;">SNOOKER</span>':'<span style="display:inline-block;background:rgba(74,143,212,0.15);color:#4a8fd4;padding:2px 8px;border-radius:6px;font-size:9px;font-weight:800;letter-spacing:0.1em;margin-right:8px;">8 BALL</span>';
+    var snookerLine='';
+    if(g.snookerData){
+      var maxHb=Math.max(g.snookerData.highestBreak[g.pids[0]]||0, g.snookerData.highestBreak[g.pids[1]]||0);
+      snookerLine='<div style="font-size:13px;color:#94a3b8;margin-top:4px;">Score: <strong style="color:#fff;">'+g.snookerData.scoreA+' &mdash; '+g.snookerData.scoreB+'</strong> &middot; Top break: <strong style="color:#fff;">'+maxHb+'</strong></div>';
+    }
+    html+='<div class="hcard"><div class="flex jb ac"><div>'+typeBadge+'<span style="font-size:10px;font-weight:800;color:#5a7898;text-transform:uppercase;">'+fmtDate(g.date)+'</span></div><div style="font-size:10px;color:#5a7898;">'+fmtDur(g.dur||0)+'</div></div>'+
       '<div style="font-size:18px;font-weight:700;margin:8px 0 4px;">'+esc(n1)+' vs '+esc(n2)+'</div>'+
-      '<div style="font-size:11px;color:#ebbf52;font-weight:800;text-transform:uppercase;">Winner: '+esc(wd)+'</div></div>';
+      '<div style="font-size:11px;color:#ebbf52;font-weight:800;text-transform:uppercase;">Winner: '+esc(wd)+'</div>'+
+      snookerLine+
+      '</div>';
   }
   l.innerHTML=html;
 }
