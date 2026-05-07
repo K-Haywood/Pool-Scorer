@@ -168,7 +168,7 @@ input,select{user-select:text;-webkit-user-select:text;}
 .sn-act:active{background:rgba(255,255,255,0.08);}
 .sn-act-foul{background:rgba(239,68,68,0.15);color:#f87171;border-color:rgba(239,68,68,0.3);}
 .sn-act-foul:active{background:rgba(239,68,68,0.25);}
-.sn-act-undo{flex:0 0 70px;}
+.sn-act-undo{flex:0 0 56px;}
 .sn-end{width:100%;min-height:58px;background:#ebbf52;color:#050c18;font-weight:800;border:none;border-radius:14px;font-size:15px;cursor:pointer;text-transform:uppercase;letter-spacing:0.1em;}
 .sn-end:active{background:#d4aa47;}
 .sn-ball-dim{opacity:0.22;}
@@ -856,7 +856,8 @@ function _snookerRenderBalls(){
 }
 function _snookerActionsRender(){
   document.getElementById('sn-actions').innerHTML=
-    '<button class="sn-act" onclick="snookerMiss()">Miss</button>'+
+    '<button class="sn-act sn-act-foul" onclick="snookerMiss()">Miss +4</button>'+
+    '<button class="sn-act" onclick="snookerSafe()">Safe</button>'+
     '<button class="sn-act sn-act-foul" onclick="snookerFoulPrompt()">Foul</button>'+
     '<button class="sn-act sn-act-undo" onclick="snookerUndo()">&#8634;</button>';
 }
@@ -931,8 +932,23 @@ function snookerPot(value){
 function snookerMiss(){
   if(!snookerState) return;
   snookerState.history.push(_snookerSnap());
+  var p=snookerState.currentPlayer;
+  var opp=byId(curGame.pids[1-p]);
+  snookerState.scores[1-p]+=4;
+  snookerState.fouls[p]++;
+  snookerState.currentBreak=0;
+  snookerState.currentPlayer=1-p;
+  snookerState._foulMsg='Miss — +4 to '+(opp?esc(opp.name):'opponent');
+  _snookerActionsRender();
+  _snookerRender();
+}
+function snookerSafe(){
+  if(!snookerState) return;
+  snookerState.history.push(_snookerSnap());
   snookerState.currentBreak=0;
   snookerState.currentPlayer=1-snookerState.currentPlayer;
+  snookerState._foulMsg='Safe — turn passes, no penalty';
+  _snookerActionsRender();
   _snookerRender();
 }
 function snookerFoulPrompt(){
