@@ -938,6 +938,7 @@ function snookerMiss(){
   snookerState.fouls[p]++;
   snookerState.currentBreak=0;
   snookerState.currentPlayer=1-p;
+  if(snookerState.colourSeqIdx<0) snookerState.expectingRed=true;
   snookerState._foulMsg='Miss — +4 to '+(opp?esc(opp.name):'opponent');
   _snookerActionsRender();
   _snookerRender();
@@ -947,6 +948,7 @@ function snookerSafe(){
   snookerState.history.push(_snookerSnap());
   snookerState.currentBreak=0;
   snookerState.currentPlayer=1-snookerState.currentPlayer;
+  if(snookerState.colourSeqIdx<0) snookerState.expectingRed=true;
   snookerState._foulMsg='Safe — turn passes, no penalty';
   _snookerActionsRender();
   _snookerRender();
