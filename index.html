@@ -298,14 +298,14 @@ input,select{user-select:text;-webkit-user-select:text;}
       <!-- SNOOKER UI -->
       <div id="game-snooker-ui" style="display:none;flex:1;flex-direction:column;">
         <div class="sn-scores" id="sn-scores"></div>
-        <div style="display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;margin-bottom:4px;">
+        <div style="text-align:center;margin-bottom:4px;">
           <span style="font-size:10px;color:#5a7898;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;">Tap a potted ball</span>
-          <button style="margin-left:10px;font-size:11px;color:#ebbf52;background:rgba(235,191,82,0.1);border:1px solid rgba(235,191,82,0.25);border-radius:8px;padding:4px 10px;font-weight:700;cursor:pointer;" onclick="snookerShowLayout()">TABLE</button>
         </div>
         <div class="sn-balls" id="sn-balls"></div>
         <div class="sn-status" id="sn-status">Reds: 15 left</div>
         <div class="sn-actions" id="sn-actions"></div>
         <button class="sn-end" onclick="snookerEndFramePrompt()">End Frame &amp; Save</button>
+        <button onclick="snookerShowLayout()" style="margin-top:8px;width:100%;background:rgba(235,191,82,0.07);border:1px solid rgba(235,191,82,0.2);border-radius:10px;color:#ebbf52;font-size:12px;font-weight:700;padding:10px;cursor:pointer;letter-spacing:0.04em;">View Table Layout / Points</button>
       </div>
   </div>
 </div>
@@ -1045,52 +1045,66 @@ function snookerSaveFrame(winnerId){
 
 function snookerShowLayout(){
   var svg=
-    '<div style="text-align:center;padding:4px 0 10px;">'+
-    '<svg width="220" height="182" viewBox="0 0 220 182" xmlns="http://www.w3.org/2000/svg" style="border-radius:8px;">'+
-    '<rect width="220" height="182" rx="6" fill="#14532d"/>'+
-    '<rect x="8" y="8" width="204" height="166" rx="3" fill="#166534"/>'+
-    '<line x1="8" y1="138" x2="212" y2="138" stroke="rgba(255,255,255,0.35)" stroke-width="1"/>'+
-    '<path d="M 82 138 A 28 28 0 0 1 138 138" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1"/>'+
-    '<circle cx="110" cy="22" r="8" fill="#1e293b" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>'+
-    '<text x="110" y="25.5" text-anchor="middle" fill="white" font-family="sans-serif" font-size="8" font-weight="bold">7</text>'+
-    '<circle cx="110" cy="44" r="8" fill="#ec4899"/>'+
-    '<text x="110" y="47.5" text-anchor="middle" fill="white" font-family="sans-serif" font-size="8" font-weight="bold">6</text>'+
-    '<circle cx="110" cy="60" r="5" fill="#dc2626"/>'+
-    '<circle cx="103" cy="70" r="5" fill="#dc2626"/>'+
-    '<circle cx="117" cy="70" r="5" fill="#dc2626"/>'+
-    '<circle cx="96" cy="80" r="5" fill="#dc2626"/>'+
-    '<circle cx="110" cy="80" r="5" fill="#dc2626"/>'+
-    '<circle cx="124" cy="80" r="5" fill="#dc2626"/>'+
-    '<circle cx="89" cy="90" r="5" fill="#dc2626"/>'+
-    '<circle cx="103" cy="90" r="5" fill="#dc2626"/>'+
-    '<circle cx="117" cy="90" r="5" fill="#dc2626"/>'+
-    '<circle cx="131" cy="90" r="5" fill="#dc2626"/>'+
-    '<circle cx="82" cy="100" r="5" fill="#dc2626"/>'+
-    '<circle cx="96" cy="100" r="5" fill="#dc2626"/>'+
-    '<circle cx="110" cy="100" r="5" fill="#dc2626"/>'+
-    '<circle cx="124" cy="100" r="5" fill="#dc2626"/>'+
-    '<circle cx="138" cy="100" r="5" fill="#dc2626"/>'+
-    '<circle cx="110" cy="118" r="8" fill="#2563eb"/>'+
-    '<text x="110" y="121.5" text-anchor="middle" fill="white" font-family="sans-serif" font-size="8" font-weight="bold">5</text>'+
-    '<circle cx="70" cy="138" r="8" fill="#16a34a"/>'+
-    '<text x="70" y="141.5" text-anchor="middle" fill="white" font-family="sans-serif" font-size="8" font-weight="bold">3</text>'+
-    '<circle cx="110" cy="138" r="8" fill="#92400e"/>'+
-    '<text x="110" y="141.5" text-anchor="middle" fill="white" font-family="sans-serif" font-size="8" font-weight="bold">4</text>'+
-    '<circle cx="150" cy="138" r="8" fill="#facc15"/>'+
-    '<text x="150" y="141.5" text-anchor="middle" fill="#111" font-family="sans-serif" font-size="8" font-weight="bold">2</text>'+
-    '<text x="156" y="25" fill="rgba(255,255,255,0.6)" font-family="sans-serif" font-size="7.5">BLACK</text>'+
-    '<text x="156" y="47" fill="rgba(255,255,255,0.6)" font-family="sans-serif" font-size="7.5">PINK</text>'+
-    '<text x="150" y="83" fill="rgba(255,255,255,0.6)" font-family="sans-serif" font-size="7.5">REDS</text>'+
-    '<text x="150" y="92" fill="rgba(255,255,255,0.6)" font-family="sans-serif" font-size="7">(15 balls)</text>'+
-    '<text x="156" y="121" fill="rgba(255,255,255,0.6)" font-family="sans-serif" font-size="7.5">BLUE</text>'+
-    '<text x="70" y="157" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-family="sans-serif" font-size="7">GREEN</text>'+
-    '<text x="110" y="157" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-family="sans-serif" font-size="7">BROWN</text>'+
-    '<text x="150" y="157" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-family="sans-serif" font-size="7">YELLOW</text>'+
-    '<text x="110" y="173" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-family="sans-serif" font-size="7">&#9650; YOUR END</text>'+
+    '<div style="text-align:center;padding:4px 0 6px;">'+
+    '<svg width="300" height="150" viewBox="0 0 310 155" xmlns="http://www.w3.org/2000/svg" style="border-radius:8px;">'+
+    '<rect width="310" height="155" rx="7" fill="#6b3a12"/>'+
+    '<rect x="10" y="10" width="290" height="135" rx="2" fill="#1c7a20"/>'+
+    '<circle cx="10" cy="10" r="5.5" fill="#050c18"/>'+
+    '<circle cx="155" cy="10" r="4.5" fill="#050c18"/>'+
+    '<circle cx="300" cy="10" r="5.5" fill="#050c18"/>'+
+    '<circle cx="10" cy="145" r="5.5" fill="#050c18"/>'+
+    '<circle cx="155" cy="145" r="4.5" fill="#050c18"/>'+
+    '<circle cx="300" cy="145" r="5.5" fill="#050c18"/>'+
+    '<line x1="77" y1="10" x2="77" y2="145" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>'+
+    '<path d="M 77,59.5 A 18,18 0 0,0 77,95.5" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>'+
+    '<text x="79" y="23" fill="rgba(255,255,255,0.4)" font-family="sans-serif" font-size="6.5">Baulk line</text>'+
+    '<text x="57" y="79" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-family="sans-serif" font-size="8" font-style="italic">D</text>'+
+    '<circle cx="77" cy="95.5" r="6.5" fill="#e8c200"/>'+
+    '<text x="77" y="98.5" text-anchor="middle" fill="#111" font-family="sans-serif" font-size="7" font-weight="bold">2</text>'+
+    '<text x="77" y="111" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-family="sans-serif" font-size="5.5">YLW</text>'+
+    '<circle cx="77" cy="59.5" r="6.5" fill="#22a845"/>'+
+    '<text x="77" y="62.5" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="7" font-weight="bold">3</text>'+
+    '<text x="77" y="48" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-family="sans-serif" font-size="5.5">GRN</text>'+
+    '<circle cx="77" cy="77.5" r="6.5" fill="#8b4513"/>'+
+    '<text x="77" y="80.5" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="7" font-weight="bold">4</text>'+
+    '<text x="91" y="74" fill="rgba(255,255,255,0.4)" font-family="sans-serif" font-size="5.5">BRN</text>'+
+    '<circle cx="155" cy="77.5" r="6.5" fill="#1a6fd4"/>'+
+    '<text x="155" y="80.5" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="7" font-weight="bold">5</text>'+
+    '<text x="155" y="93" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-family="sans-serif" font-size="5.5">BLUE</text>'+
+    '<circle cx="201" cy="77.5" r="6.5" fill="#e85c9a"/>'+
+    '<text x="201" y="80.5" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="7" font-weight="bold">6</text>'+
+    '<text x="201" y="93" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-family="sans-serif" font-size="5.5">PINK</text>'+
+    '<circle cx="213" cy="77.5" r="5.5" fill="#cc1111"/>'+
+    '<circle cx="222.5" cy="72" r="5.5" fill="#cc1111"/>'+
+    '<circle cx="222.5" cy="83" r="5.5" fill="#cc1111"/>'+
+    '<circle cx="232" cy="66.5" r="5.5" fill="#cc1111"/>'+
+    '<circle cx="232" cy="77.5" r="5.5" fill="#cc1111"/>'+
+    '<circle cx="232" cy="88.5" r="5.5" fill="#cc1111"/>'+
+    '<circle cx="241.5" cy="61" r="5.5" fill="#cc1111"/>'+
+    '<circle cx="241.5" cy="72" r="5.5" fill="#cc1111"/>'+
+    '<circle cx="241.5" cy="83" r="5.5" fill="#cc1111"/>'+
+    '<circle cx="241.5" cy="94" r="5.5" fill="#cc1111"/>'+
+    '<circle cx="251" cy="55.5" r="5.5" fill="#cc1111"/>'+
+    '<circle cx="251" cy="66.5" r="5.5" fill="#cc1111"/>'+
+    '<circle cx="251" cy="77.5" r="5.5" fill="#cc1111"/>'+
+    '<circle cx="251" cy="88.5" r="5.5" fill="#cc1111"/>'+
+    '<circle cx="251" cy="99.5" r="5.5" fill="#cc1111"/>'+
+    '<text x="232" y="113" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-family="sans-serif" font-size="5.5">REDS &#215;15</text>'+
+    '<circle cx="283" cy="77.5" r="6.5" fill="#1c1c1c" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>'+
+    '<text x="283" y="80.5" text-anchor="middle" fill="#fff" font-family="sans-serif" font-size="7" font-weight="bold">7</text>'+
+    '<text x="283" y="93" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-family="sans-serif" font-size="5.5">BLK</text>'+
     '</svg>'+
-    '<div style="margin-top:10px;font-size:11px;color:#94a3b8;line-height:1.7;">Numbers = points value<br>Pot red, then any colour — repeat<br>No reds: Yellow &#8594; Green &#8594; Brown &#8594; Blue &#8594; Pink &#8594; Black</div>'+
+    '<div style="margin-top:10px;text-align:left;font-size:11px;color:#94a3b8;line-height:1.85;padding:0 4px;">'+
+    '<b style="color:#ebbf52;">During reds phase:</b><br>'+
+    '&#9654; Pot a red &#8594; pot any colour (colour goes back on its spot)<br>'+
+    '&#9654; Miss or foul &#8594; turn ends, no colour needed<br>'+
+    '&#9654; After potting last red &#8594; pot one colour (stays off table)<br><br>'+
+    '<b style="color:#ebbf52;">Final colours (in order):</b><br>'+
+    'Yellow (2) &#8594; Green (3) &#8594; Brown (4) &#8594; Blue (5) &#8594; Pink (6) &#8594; Black (7)<br>'+
+    'Each colour stays off the table once potted.'+
+    '</div>'+
     '</div>';
-  Modal.show('Ball Starting Positions',svg,[{label:'Close',fn:Modal.hide}]);
+  Modal.show('Table Layout &amp; Points',svg,[{label:'Close',fn:Modal.hide}]);
 }
 
 // ==========================================
