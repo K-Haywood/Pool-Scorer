@@ -277,7 +277,10 @@ input,select{user-select:text;-webkit-user-select:text;}
       <div class="flex ac jb" style="padding:10px 0;">
         <button onclick="cancelGame()" style="background:none;border:none;color:#5a7898;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;">Cancel Match</button>
         <span id="g-timer" style="font-size:26px;font-weight:800;color:#ebbf52;letter-spacing:0.05em;">00:00</span>
-        <button id="g-mode-badge" onclick="promptModeChange()" style="background:rgba(235,191,82,0.12);border:1px solid rgba(235,191,82,0.3);color:#ebbf52;font-size:11px;font-weight:700;letter-spacing:0.08em;border-radius:10px;padding:6px 10px;cursor:pointer;min-width:60px;text-align:center;">8 Ball</button>
+        <div style="display:flex;align-items:center;">
+          <button id="g-mode-badge" onclick="promptModeChange()" style="background:rgba(235,191,82,0.12);border:1px solid rgba(235,191,82,0.3);color:#ebbf52;font-size:11px;font-weight:700;letter-spacing:0.08em;border-radius:10px;padding:6px 10px;cursor:pointer;min-width:60px;text-align:center;">8 Ball</button>
+          <button onclick="openFeedback()" style="margin-left:8px;width:30px;height:30px;border-radius:50%;background:none;border:1px solid rgba(255,255,255,0.12);color:#5a7898;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;">&#9998;</button>
+        </div>
       </div>
 
       <!-- 8-BALL UI -->
@@ -287,9 +290,6 @@ input,select{user-select:text;-webkit-user-select:text;}
             <div id="game-instr" style="font-size:18px;font-weight:700;color:#fff;">Tap the Winner to Score</div>
         </div>
         <div class="g-players" id="g-player-tracker"></div>
-        <div style="opacity:0.3;text-align:center;font-size:12px;color:#5a7898;margin-bottom:20px;">
-            Hold name for 2s for Admin PIN
-        </div>
       </div>
 
       <!-- SNOOKER UI -->
