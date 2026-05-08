@@ -143,14 +143,14 @@ input,select{user-select:text;-webkit-user-select:text;}
 .gtype-btn.on{border-color:#ebbf52;background:rgba(235,191,82,0.1);color:#ebbf52;}
 .gtype-btn:active{background:rgba(235,191,82,0.15);}
 /* --- SNOOKER SCORING UI --- */
-.sn-scores{display:flex;margin:10px 0 16px;}
+.sn-scores{display:flex;margin:4px 0 10px;}
 .sn-score-card{flex:1;padding:18px 10px;background:rgba(6,13,26,0.92);border:2px solid rgba(255,255,255,0.1);border-radius:16px;margin:0 6px;text-align:center;cursor:pointer;-webkit-transition:border-color 0.2s,background 0.2s;transition:border-color 0.2s,background 0.2s;}
 .sn-score-card.on{border-color:#ebbf52;background:rgba(235,191,82,0.08);}
 .sn-name{font-size:15px;font-weight:700;color:#94a3b8;margin-bottom:6px;letter-spacing:0.05em;}
 .sn-score-card.on .sn-name{color:#ebbf52;}
 .sn-score{font-size:62px;font-weight:900;color:#fff;line-height:1;}
 .sn-meta{font-size:11px;color:#5a7898;margin-top:8px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;}
-.sn-balls{display:-webkit-flex;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;-webkit-justify-content:center;justify-content:center;margin:10px 0;}
+.sn-balls{display:-webkit-flex;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;-webkit-justify-content:center;justify-content:center;margin:0;}
 .sn-ball{width:78px;height:78px;border-radius:50%;border:2px solid rgba(255,255,255,0.18);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;margin:5px;font-weight:900;color:#fff;-webkit-tap-highlight-color:transparent;}
 .sn-ball:active{border-color:#ebbf52;}
 .sn-ball-red{background:#dc2626;}
@@ -162,8 +162,8 @@ input,select{user-select:text;-webkit-user-select:text;}
 .sn-ball-black{background:#0f172a;border-color:rgba(255,255,255,0.3);}
 .sn-ball-val{font-size:26px;line-height:1;}
 .sn-ball-lbl{font-size:9px;letter-spacing:0.1em;margin-top:2px;opacity:0.7;}
-.sn-status{text-align:center;font-size:14px;color:#5a7898;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;margin:8px 0 14px;}
-.sn-actions{display:flex;margin:8px 0 14px;}
+.sn-status{text-align:center;font-size:14px;color:#5a7898;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;margin:0;}
+.sn-actions{display:flex;margin:0;}
 .sn-act{flex:1;min-height:54px;border:1px solid rgba(255,255,255,0.1);background:rgba(6,13,26,0.7);color:#e8f0f8;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer;margin:0 4px;text-transform:uppercase;letter-spacing:0.08em;}
 .sn-act:active{background:rgba(255,255,255,0.08);}
 .sn-act-foul{background:rgba(239,68,68,0.15);color:#f87171;border-color:rgba(239,68,68,0.3);}
@@ -296,17 +296,23 @@ input,select{user-select:text;-webkit-user-select:text;}
       </div>
 
       <!-- SNOOKER UI -->
-      <div id="game-snooker-ui" style="display:none;flex:1;flex-direction:column;">
+      <div id="game-snooker-ui" style="display:none;-webkit-flex:1;flex:1;-webkit-flex-direction:column;flex-direction:column;">
         <div class="sn-scores" id="sn-scores"></div>
-        <div style="text-align:center;margin-bottom:4px;">
-          <span style="font-size:10px;color:#5a7898;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;">Tap a potted ball</span>
+        <!-- Middle section grows to fill space, centres content -->
+        <div style="-webkit-flex:1;flex:1;display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;-webkit-justify-content:space-around;justify-content:space-around;">
+          <div style="text-align:center;">
+            <span style="font-size:11px;color:#5a7898;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;">Tap a potted ball</span>
+          </div>
+          <div class="sn-balls" id="sn-balls"></div>
+          <div class="sn-status" id="sn-status">Reds: 15 left</div>
+          <div class="sn-actions" id="sn-actions"></div>
         </div>
-        <div class="sn-balls" id="sn-balls"></div>
-        <div class="sn-status" id="sn-status">Reds: 15 left</div>
-        <div class="sn-actions" id="sn-actions"></div>
-        <button class="sn-end" onclick="snookerEndFramePrompt()">End Frame &amp; Save</button>
-        <button onclick="openJudgeSheet()" style="margin-top:8px;width:100%;background:rgba(235,191,82,0.15);border:1px solid rgba(235,191,82,0.45);border-radius:10px;color:#ebbf52;font-size:13px;font-weight:800;padding:12px;cursor:pointer;letter-spacing:0.08em;text-transform:uppercase;">&#9679; Ask Referee</button>
-        <button onclick="snookerShowLayout()" style="margin-top:6px;width:100%;background:rgba(235,191,82,0.07);border:1px solid rgba(235,191,82,0.2);border-radius:10px;color:#ebbf52;font-size:12px;font-weight:700;padding:10px;cursor:pointer;letter-spacing:0.04em;">View Table Layout / Points</button>
+        <!-- Bottom buttons grouped together -->
+        <div style="padding-top:6px;">
+          <button class="sn-end" onclick="snookerEndFramePrompt()">End Frame &amp; Save</button>
+          <button onclick="openJudgeSheet()" style="margin-top:8px;width:100%;background:rgba(235,191,82,0.15);border:1px solid rgba(235,191,82,0.45);border-radius:10px;color:#ebbf52;font-size:13px;font-weight:800;padding:12px;cursor:pointer;letter-spacing:0.08em;text-transform:uppercase;">&#9679; Ask Referee</button>
+          <button onclick="snookerShowLayout()" style="margin-top:6px;width:100%;background:rgba(235,191,82,0.07);border:1px solid rgba(235,191,82,0.2);border-radius:10px;color:#ebbf52;font-size:12px;font-weight:700;padding:10px;cursor:pointer;letter-spacing:0.04em;">View Table Layout / Points</button>
+        </div>
       </div>
   </div>
 </div>
