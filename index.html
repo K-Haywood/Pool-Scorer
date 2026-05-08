@@ -68,14 +68,15 @@ input,select{user-select:text;-webkit-user-select:text;}
 
 /* --- SCREENS --- */
 .screen{display:none;position:fixed;top:0;left:0;right:0;bottom:76px;overflow-y:auto;-webkit-overflow-scrolling:touch;background:transparent;padding-bottom:120px;z-index:1;}
+#screen-setup{-webkit-flex-direction:column;flex-direction:column;padding-bottom:0;}
 #screen-onboarding{display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:1000;background:#050c18;}
 #screen-game{display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:500;background:#050c18;}
 
 /* --- PLAYER SELECTION --- */
 .pl-grid{display:flex;flex-wrap:wrap;padding:8px;width:100%;}
-.pc{width:calc(50% - 12px);margin:6px;background:rgba(6,13,26,0.88);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:24px 12px;display:flex;flex-direction:column;align-items:center;cursor:pointer;}
+.pc{width:calc(33.333% - 12px);margin:6px;background:rgba(6,13,26,0.88);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:16px 8px;display:flex;flex-direction:column;align-items:center;cursor:pointer;}
 .pc.on{border-color:#ebbf52;background:rgba(235,191,82,0.05);}
-.pc-av{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;color:#fff;margin-bottom:12px;}
+.pc-av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;color:#fff;margin-bottom:8px;}
 
 /* --- MODAL --- */
 #modal{display:none;position:fixed;top:0;right:0;bottom:0;left:0;z-index:2000;background:rgba(2,6,14,0.92);align-items:center;justify-content:center;padding:24px;}
@@ -263,7 +264,7 @@ input,select{user-select:text;-webkit-user-select:text;}
     </div>
   </div>
   <div id="recent-game-wrap"></div>
-  <div style="padding:24px;position:-webkit-sticky;position:sticky;bottom:0;background:rgba(2,6,14,0.92);border-top:1px solid rgba(255,255,255,0.05);">
+  <div style="padding:24px;margin-top:auto;background:rgba(2,6,14,0.92);border-top:1px solid rgba(255,255,255,0.05);flex-shrink:0;">
     <button id="ss-btn" class="btn" style="width:100%;min-height:60px;" onclick="startGame()">Start Match</button>
   </div>
 </div>
@@ -608,7 +609,7 @@ function go(tab) {
       if(el) el.style.display = 'none';
   }
   
-  if(tab === 'play') { setupInit(); document.getElementById('screen-setup').style.display = 'block'; document.getElementById('screen-onboarding').style.display = 'none'; }
+  if(tab === 'play') { setupInit(); document.getElementById('screen-setup').style.display = '-webkit-flex'; document.getElementById('screen-setup').style.display = 'flex'; document.getElementById('screen-onboarding').style.display = 'none'; }
   else { var target = document.getElementById('screen-'+tab); if(target) target.style.display = 'block'; }
   
   var nbs = document.querySelectorAll('.nb');
@@ -689,8 +690,8 @@ function renderGrid(){
       var r = plRec(p.id, _gs), on = ss.sel.indexOf(p.id)!==-1;
       var c = document.createElement('div'); c.className = 'pc'+(on?' on':'');
       c.innerHTML = '<div class="pc-av" style="background:'+avColor(p.name)+'">'+esc(p.name.substring(0,2).toUpperCase())+'</div>'+
-        '<div style="font-size:16px;font-weight:600;color:#e8f0f8;margin-bottom:4px;text-align:center;">'+esc(p.name)+'</div>'+
-        '<div style="font-size:11px;color:#5a7898;">'+r.w+'W / '+r.l+'L</div>';
+        '<div style="font-size:13px;font-weight:700;color:#e8f0f8;margin-bottom:3px;text-align:center;word-break:break-word;">'+esc(p.name)+'</div>'+
+        '<div style="font-size:10px;color:#5a7898;">'+r.w+'W / '+r.l+'L</div>';
       c.onclick = function(){ if(ss.sel.indexOf(p.id)!==-1) ss.sel.splice(ss.sel.indexOf(p.id),1); else if(ss.sel.length<2) ss.sel.push(p.id); renderGrid(); updBtn(); };
       frag.appendChild(c);
     })(ps[i]);
