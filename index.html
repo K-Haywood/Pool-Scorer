@@ -369,14 +369,8 @@ input,select{user-select:text;-webkit-user-select:text;}
     </div>
   </div>
   <div class="widget" style="padding:0;"><div id="pl-list"></div></div>
-  <div class="widget">
-    <div class="widget-hdr"><span class="widget-title">Feedback Webhook</span></div>
-    <div style="font-size:11px;color:#5a7898;margin-bottom:10px;line-height:1.5;">Discord webhook URL — feedback from users lands in your channel. Create one in Discord: channel settings &#8594; Integrations &#8594; Webhooks.</div>
-    <div class="judge-box">
-      <input type="text" id="webhook-in" class="judge-inp" placeholder="https://discord.com/api/webhooks/..." autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
-      <button class="btn btn-g btn-sm" onclick="saveWebhook()">SAVE</button>
-    </div>
-    <div id="webhook-status" style="font-size:11px;color:#5a7898;margin-top:8px;"></div>
+  <div style="padding:0 16px 16px;">
+    <button class="btn" style="width:100%;" onclick="viewFeedback()">View Player Feedback</button>
   </div>
 </div>
 
@@ -1638,49 +1632,50 @@ function init(){
 }
 init();
 
-function saveWebhook(){
-  var el=document.getElementById('webhook-in');
-  var url=el?el.value.trim():'';
-  var st=document.getElementById('webhook-status');
-  if(url && url.indexOf('discord.com/api/webhooks/')!==-1){
-    try{localStorage.setItem('feedback_webhook',url);}catch(e){}
-    if(st) st.innerText='Saved.';
-    if(el) el.value='';
-  } else {
-    if(st) st.innerText='Paste a Discord webhook URL.';
-  }
-}
 function openFeedback(){
-  var wh='';try{wh=localStorage.getItem('feedback_webhook')||'';}catch(e){}
-  if(!wh){
-    Modal.show('Feedback Not Set Up','Ask the app admin to configure a Discord webhook in the Players screen.',[{label:'OK',fn:Modal.hide}]);
-    return;
-  }
   Modal.show('Send Feedback',
-    '<textarea id="fb-txt" style="width:100%;min-height:110px;background:rgba(6,13,26,0.7);border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:#e8f0f8;font-size:14px;padding:12px;margin-top:8px;resize:none;font-family:inherit;" placeholder="What could be better? Any bugs or ideas..." maxlength="500"></textarea>',
+    '<textarea id="fb-txt" style="width:100%;min-height:120px;background:rgba(6,13,26,0.7);border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:#e8f0f8;font-size:14px;padding:12px;margin-top:8px;resize:none;font-family:inherit;" placeholder="What could be better? Any bugs or ideas..." maxlength="500"></textarea>',
     [
-      {label:'Send',cls:'btn-g',fn:function(){
+      {label:'Submit',cls:'btn-g',fn:function(){
         var el=document.getElementById('fb-txt');
         var msg=el?el.value.trim():'';
-        if(!msg){return;}
-        Modal.hide();
-        var xhr=new XMLHttpRequest();
-        xhr.open('POST',wh,true);
-        xhr.setRequestHeader('Content-Type','application/json');
-        xhr.onreadystatechange=function(){
-          if(xhr.readyState===4){
-            if(xhr.status===204||xhr.status===200){
-              Modal.show('Thanks!','Feedback sent.',[{label:'OK',fn:Modal.hide}]);
-            } else {
-              Modal.show('Error','Could not send — check webhook URL.',[{label:'OK',fn:Modal.hide}]);
-            }
-          }
-        };
-        xhr.send(JSON.stringify({content:'**Pool Scorer Feedback**\n'+msg}));
+        if(!msg) return;
+        var log=[];
+        try{log=JSON.parse(localStorage.getItem('feedback_log')||'[]');}catch(e){}
+        log.push({date:Date.now(),msg:msg});
+        try{localStorage.setItem('feedback_log',JSON.stringify(log));}catch(e){}
+        Modal.show('Thanks!','Your feedback has been saved.',[{label:'OK',fn:Modal.hide}]);
       }},
       {label:'Cancel',fn:Modal.hide}
     ]
   );
+}
+function viewFeedback(){
+  requireAdmin('View Feedback',function(){
+    var log=[];
+    try{log=JSON.parse(localStorage.getItem('feedback_log')||'[]');}catch(e){}
+    if(!log.length){
+      Modal.show('Feedback','No feedback yet.',[{label:'OK',fn:Modal.hide}]);
+      return;
+    }
+    var html='<div style="text-align:left;max-height:340px;overflow-y:auto;">';
+    for(var i=log.length-1;i>=0;i--){
+      var d=new Date(log[i].date);
+      var ds=d.getDate()+'/'+(d.getMonth()+1)+' '+d.getHours()+':'+(d.getMinutes()<10?'0':'')+d.getMinutes();
+      html+='<div style="border-bottom:1px solid rgba(255,255,255,0.07);padding:10px 0;">'
+        +'<div style="font-size:10px;color:#5a7898;margin-bottom:4px;">'+ds+'</div>'
+        +'<div style="font-size:13px;color:#e8f0f8;line-height:1.5;">'+esc(log[i].msg)+'</div>'
+        +'</div>';
+    }
+    html+='</div>';
+    Modal.show('Feedback ('+log.length+')',html,[
+      {label:'Clear All',cls:'btn-r',fn:function(){
+        try{localStorage.removeItem('feedback_log');}catch(e){}
+        Modal.hide();
+      }},
+      {label:'Close',fn:Modal.hide}
+    ]);
+  });
 }
 </script>
 </body>
