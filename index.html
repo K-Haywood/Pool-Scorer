@@ -162,7 +162,7 @@ input,select{user-select:text;-webkit-user-select:text;}
 .sn-ball-black{background:#0f172a;border-color:rgba(255,255,255,0.3);}
 .sn-ball-val{font-size:26px;line-height:1;}
 .sn-ball-lbl{font-size:9px;letter-spacing:0.1em;margin-top:2px;opacity:0.7;}
-.sn-status{text-align:center;font-size:14px;color:#5a7898;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;margin:0;}
+.sn-status{text-align:center;font-size:14px;color:#5a7898;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;margin:10px 0 12px;}
 .sn-actions{display:flex;margin:0;}
 .sn-act{flex:1;min-height:54px;border:1px solid rgba(255,255,255,0.1);background:rgba(6,13,26,0.7);color:#e8f0f8;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer;margin:0 4px;text-transform:uppercase;letter-spacing:0.08em;}
 .sn-act:active{background:rgba(255,255,255,0.08);}
@@ -296,22 +296,25 @@ input,select{user-select:text;-webkit-user-select:text;}
       </div>
 
       <!-- SNOOKER UI -->
-      <div id="game-snooker-ui" style="display:none;-webkit-flex:1;flex:1;-webkit-flex-direction:column;flex-direction:column;">
+      <div id="game-snooker-ui" style="display:none;-webkit-flex:1;flex:1;-webkit-flex-direction:column;flex-direction:column;-webkit-justify-content:space-between;justify-content:space-between;">
+        <!-- TOP: score cards -->
         <div class="sn-scores" id="sn-scores"></div>
-        <!-- Middle section grows to fill space, centres content -->
-        <div style="-webkit-flex:1;flex:1;display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;-webkit-justify-content:space-around;justify-content:space-around;">
-          <div style="text-align:center;">
+        <!-- MIDDLE: ball controls -->
+        <div>
+          <div style="text-align:center;margin-bottom:10px;">
             <span style="font-size:11px;color:#5a7898;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;">Tap a potted ball</span>
           </div>
           <div class="sn-balls" id="sn-balls"></div>
           <div class="sn-status" id="sn-status">Reds: 15 left</div>
           <div class="sn-actions" id="sn-actions"></div>
         </div>
-        <!-- Bottom buttons grouped together -->
-        <div style="padding-top:6px;">
+        <!-- BOTTOM: action buttons -->
+        <div>
           <button class="sn-end" onclick="snookerEndFramePrompt()">End Frame &amp; Save</button>
-          <button onclick="openJudgeSheet()" style="margin-top:8px;width:100%;background:rgba(235,191,82,0.15);border:1px solid rgba(235,191,82,0.45);border-radius:10px;color:#ebbf52;font-size:13px;font-weight:800;padding:12px;cursor:pointer;letter-spacing:0.08em;text-transform:uppercase;">&#9679; Ask Referee</button>
-          <button onclick="snookerShowLayout()" style="margin-top:6px;width:100%;background:rgba(235,191,82,0.07);border:1px solid rgba(235,191,82,0.2);border-radius:10px;color:#ebbf52;font-size:12px;font-weight:700;padding:10px;cursor:pointer;letter-spacing:0.04em;">View Table Layout / Points</button>
+          <div style="display:-webkit-flex;display:flex;margin-top:8px;">
+            <button onclick="openJudgeSheet()" style="-webkit-flex:1;flex:1;margin-right:5px;background:rgba(235,191,82,0.15);border:1px solid rgba(235,191,82,0.45);border-radius:10px;color:#ebbf52;font-size:13px;font-weight:800;padding:14px 0;cursor:pointer;letter-spacing:0.06em;text-transform:uppercase;">&#9679; Referee</button>
+            <button onclick="snookerShowLayout()" style="-webkit-flex:1;flex:1;margin-left:5px;background:rgba(235,191,82,0.07);border:1px solid rgba(235,191,82,0.2);border-radius:10px;color:#ebbf52;font-size:12px;font-weight:700;padding:14px 0;cursor:pointer;letter-spacing:0.04em;">Table Layout</button>
+          </div>
         </div>
       </div>
   </div>
