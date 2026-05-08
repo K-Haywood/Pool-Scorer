@@ -266,9 +266,6 @@ input,select{user-select:text;-webkit-user-select:text;}
     </div>
   </div>
   <div id="recent-game-wrap"></div>
-  <div style="text-align:center;padding:10px 24px 16px;">
-    <button onclick="openFeedback()" style="background:none;border:none;color:#334155;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;cursor:pointer;padding:8px;">Send Feedback</button>
-  </div>
   <div style="padding:16px 24px;position:fixed;bottom:76px;left:0;right:0;z-index:5;background:rgba(2,6,14,0.96);border-top:1px solid rgba(255,255,255,0.07);">
     <button id="ss-btn" class="btn" style="width:100%;min-height:56px;" onclick="startGame()">Start Match</button>
   </div>
@@ -373,6 +370,9 @@ input,select{user-select:text;-webkit-user-select:text;}
     <button class="btn" style="width:100%;" onclick="viewFeedback()">View Player Feedback</button>
   </div>
 </div>
+
+<!-- FEEDBACK BUTTON -->
+<button onclick="openFeedback()" style="position:fixed;bottom:86px;left:12px;z-index:50;width:38px;height:38px;border-radius:50%;background:rgba(6,13,26,0.88);border:1px solid rgba(255,255,255,0.1);color:#334155;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;">&#9998;</button>
 
 <!-- NAVIGATION -->
 <div id="nav">
