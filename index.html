@@ -266,6 +266,9 @@ input,select{user-select:text;-webkit-user-select:text;}
     </div>
   </div>
   <div id="recent-game-wrap"></div>
+  <div style="text-align:center;padding:10px 24px 16px;">
+    <button onclick="openFeedback()" style="background:none;border:none;color:#334155;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;cursor:pointer;padding:8px;">Send Feedback</button>
+  </div>
   <div style="padding:16px 24px;position:fixed;bottom:76px;left:0;right:0;z-index:5;background:rgba(2,6,14,0.96);border-top:1px solid rgba(255,255,255,0.07);">
     <button id="ss-btn" class="btn" style="width:100%;min-height:56px;" onclick="startGame()">Start Match</button>
   </div>
@@ -1625,6 +1628,24 @@ function init(){
     if(Date.now() < parseInt(localStorage.getItem('lock_end')||0)) WinController.showLockout();
 }
 init();
+
+function openFeedback(){
+  Modal.show('Send Feedback',
+    '<textarea id="fb-txt" style="width:100%;min-height:110px;background:rgba(6,13,26,0.7);border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:#e8f0f8;font-size:14px;padding:12px;margin-top:8px;resize:none;font-family:inherit;" placeholder="What could be better? Any bugs or ideas..." maxlength="500"></textarea>',
+    [
+      {label:'Send via Email',cls:'btn-g',fn:function(){
+        var el=document.getElementById('fb-txt');
+        var msg=el?el.value.trim():'';
+        if(!msg){Modal.hide();return;}
+        var subject=encodeURIComponent('Pool Scorer Feedback');
+        var body=encodeURIComponent(msg);
+        window.location.href='mailto:Kyehaywood2004@icloud.com?subject='+subject+'&body='+body;
+        Modal.hide();
+      }},
+      {label:'Cancel',fn:Modal.hide}
+    ]
+  );
+}
 </script>
 </body>
 </html>
