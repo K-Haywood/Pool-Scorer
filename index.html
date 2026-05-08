@@ -68,7 +68,6 @@ input,select{user-select:text;-webkit-user-select:text;}
 
 /* --- SCREENS --- */
 .screen{display:none;position:fixed;top:0;left:0;right:0;bottom:76px;overflow-y:auto;-webkit-overflow-scrolling:touch;background:transparent;padding-bottom:120px;z-index:1;}
-#screen-setup{-webkit-flex-direction:column;flex-direction:column;padding-bottom:0;}
 #screen-onboarding{display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:1000;background:#050c18;}
 #screen-game{display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:500;background:#050c18;}
 
@@ -264,8 +263,8 @@ input,select{user-select:text;-webkit-user-select:text;}
     </div>
   </div>
   <div id="recent-game-wrap"></div>
-  <div style="padding:24px;margin-top:auto;background:rgba(2,6,14,0.92);border-top:1px solid rgba(255,255,255,0.05);flex-shrink:0;">
-    <button id="ss-btn" class="btn" style="width:100%;min-height:60px;" onclick="startGame()">Start Match</button>
+  <div style="padding:16px 24px;position:fixed;bottom:76px;left:0;right:0;z-index:5;background:rgba(2,6,14,0.96);border-top:1px solid rgba(255,255,255,0.07);">
+    <button id="ss-btn" class="btn" style="width:100%;min-height:56px;" onclick="startGame()">Start Match</button>
   </div>
 </div>
 
@@ -609,7 +608,7 @@ function go(tab) {
       if(el) el.style.display = 'none';
   }
   
-  if(tab === 'play') { setupInit(); document.getElementById('screen-setup').style.display = '-webkit-flex'; document.getElementById('screen-setup').style.display = 'flex'; document.getElementById('screen-onboarding').style.display = 'none'; }
+  if(tab === 'play') { setupInit(); document.getElementById('screen-setup').style.display = 'block'; document.getElementById('screen-onboarding').style.display = 'none'; }
   else { var target = document.getElementById('screen-'+tab); if(target) target.style.display = 'block'; }
   
   var nbs = document.querySelectorAll('.nb');
