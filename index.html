@@ -242,6 +242,9 @@ input,select{user-select:text;-webkit-user-select:text;}
       <span style="font-size:13px;letter-spacing:0.05em;">Snooker</span>
     </button>
   </div>
+  <div id="sn-layout-hint" style="display:none;margin:10px 16px 0;">
+    <button onclick="snookerShowLayout()" style="width:100%;background:rgba(235,191,82,0.07);border:1px solid rgba(235,191,82,0.2);border-radius:12px;color:#ebbf52;font-size:13px;font-weight:700;padding:12px;cursor:pointer;letter-spacing:0.05em;">&#9654; View Ball Starting Positions</button>
+  </div>
   <div class="mode-toggle" style="display:flex;background:rgba(4,9,18,0.8);border-radius:14px;padding:4px;margin:12px 16px;border:1px solid rgba(255,255,255,0.07);">
     <button id="mb-s" class="btn f1" style="border:none;background:none;color:#ebbf52;" onclick="selMode('singles')">1 vs 1</button>
     <button id="mb-t" class="btn f1" style="border:none;background:none;color:#5a7898;" onclick="selMode('teams')">Teams</button>
@@ -658,6 +661,8 @@ function _updGameModeUI(){
   if(bts) bts.className='gtype-btn'+(gameMode==='snooker'?' on':'');
   var mt=document.querySelector('.mode-toggle');
   if(mt) mt.style.display=gameMode==='snooker'?'none':'flex';
+  var sh=document.getElementById('sn-layout-hint');
+  if(sh) sh.style.display=gameMode==='snooker'?'block':'none';
   if(gameMode==='snooker') ss.mode='singles';
   var mb=document.getElementById('g-mode-badge'); if(mb) mb.innerText=gameMode==='8ball'?'8 Ball':'Snooker';
   var gi=document.getElementById('game-instr'); if(gi) gi.innerText=gameMode==='snooker'?'Tap the Frame Winner':'Tap the Winner to Score';
