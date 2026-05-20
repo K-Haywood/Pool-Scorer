@@ -601,7 +601,8 @@ function _pinRender() {
 }
 function _pinErr(msg) { var e=document.getElementById('pin-err'); if(e) e.innerText=msg; }
 function pinCheck() {
-    var stored = localStorage.getItem('admin_pin') || '0304';
+    var stored = localStorage.getItem('admin_pin');
+    if (!stored) { _pinErr('No PIN set — open Settings to create one.'); _pinBuf=''; return; }
     if (_pinBuf === stored) {
         _pinFails = 0; _pinLocked = false;
         localStorage.setItem('lock_end', 0);
@@ -1604,7 +1605,8 @@ function apmClear(){ if(!_apmLocked){ _apmBuf=''; _apmRender(); _apmErr(''); } }
 function _apmRender(){ for(var i=0;i<4;i++){ var d=document.getElementById('apd'+i); if(d) d.className='pin-dot'+(i<_apmBuf.length?' filled':''); } }
 function _apmErr(msg){ var e=document.getElementById('apm-err'); if(e) e.innerText=msg; }
 function apmCheck(){
-    var stored=localStorage.getItem('admin_pin')||'0304';
+    var stored=localStorage.getItem('admin_pin');
+    if(!stored){ _apmBuf=''; _apmErr('No PIN set — open Settings to create one.'); return; }
     if(_apmBuf===stored){
         _apmFails=0; _apmLocked=false; _apmBuf='';
         document.getElementById('admin-pin-overlay').style.display='none';
@@ -1659,7 +1661,6 @@ function initQuickChips(){
 
 function init(){
     document.addEventListener('touchstart', function(){}, false);
-    localStorage.setItem('admin_pin','0304');
     gameMode=localStorage.getItem('game_mode')||'8ball';
     if(getActive().length<2){ obPl=[]; obRend(); document.getElementById('screen-onboarding').style.display='block'; }
     else go('play');
